@@ -1,5 +1,6 @@
 package mx.edu.utez.controllers;
 
+import mx.edu.utez.platillo.model.PlatilloCompleto;
 import mx.edu.utez.platilloenmenu.model.PlatilloEnMenu;
 import mx.edu.utez.platilloenmenu.model.PlatilloEnMenuDao;
 import mx.edu.utez.response.MyResponse;
@@ -13,11 +14,11 @@ import java.util.List;
 public class ServicioPlatilloEnMenu {
 
     @GET
-    @Path("/platillos.en.menu")
+    @Path("/platillos.en.menu/{idMenu}")
     @Produces(MediaType.APPLICATION_JSON)
-    public MyResponse getPlatillosEnMenu(){
+    public MyResponse getPlatillosEnMenu(@PathParam("idMenu") int idMenu){
         MyResponse response = new MyResponse();
-        List<PlatilloEnMenu> platillosEnMenu = (new PlatilloEnMenuDao().getPlatillosEnMenu());
+        List<PlatilloCompleto> platillosEnMenu = (new PlatilloEnMenuDao().getPlatillosEnMenu(idMenu));
         response.setData(platillosEnMenu);
         if(platillosEnMenu.size() > 0){
             response.setStatus("success");
@@ -31,10 +32,10 @@ public class ServicioPlatilloEnMenu {
         return response;
     }
 
-    @GET
+    /*@GET
     @Path("/platillos.en.menu/{idPlatilloMenu}")
     @Produces(MediaType.APPLICATION_JSON)
-    public MyResponse getPlatilloEnMenu(@PathParam("idPlatilloMenu") int idPlatilloEnMenu){
+    public MyResponse getPlatilloEnMenuById(@PathParam("idPlatilloMenu") int idPlatilloEnMenu){
         MyResponse response = new MyResponse();
         PlatilloEnMenu platilloMenu = (new PlatilloEnMenuDao().getPlatilloEnMenuById(idPlatilloEnMenu));
         response.setData(platilloMenu);
@@ -49,7 +50,7 @@ public class ServicioPlatilloEnMenu {
         }
         return response;
     }
-
+    */
     @POST
     @Path("/platillos.en.menu")
     @Produces(MediaType.APPLICATION_JSON)

@@ -2,6 +2,7 @@ package mx.edu.utez.platilloenmenu.model;
 
 import mx.edu.utez.menu.model.Menu;
 import mx.edu.utez.platillo.model.Platillo;
+import mx.edu.utez.platillo.model.PlatilloCompleto;
 
 public class PlatilloEnMenu {
 
@@ -10,6 +11,15 @@ public class PlatilloEnMenu {
     private boolean status;
     private Menu idMenu;
     private Platillo idPlatillo;
+    private PlatilloCompleto idPlatillo2;
+
+    public PlatilloCompleto getIdPlatillo2() {
+        return idPlatillo2;
+    }
+
+    public void setIdPlatillo2(PlatilloCompleto idPlatillo2) {
+        this.idPlatillo2 = idPlatillo2;
+    }
 
     public int getIdPlatilloMenu() {
         return idPlatilloMenu;
