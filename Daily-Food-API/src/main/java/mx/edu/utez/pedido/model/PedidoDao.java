@@ -309,38 +309,52 @@ public class PedidoDao {
         return pedido;
     }
 
-    public Pedido createPedido(Pedido pedido) throws SQLException {
-        Pedido pedidoInsert = new Pedido();
+    public PedidoCompleto createPedido(PedidoCompleto pedido) throws SQLException {
+        PedidoCompleto pedidoInsert = new PedidoCompleto();
         boolean flag = false;
-
         try{
             con = ConnectionDB.getConnection();
             con.setAutoCommit(false);
             ps = con.prepareStatement("INSERT INTO pedido (fecha, costoTotal, cantidadPago, status, nombreUsuario, idDireccion, idSucursal) VALUES (?,?,?,?,?,?,?);" , Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,pedido.getFecha());
-            ps.setDouble(2,pedido.getCostoTotal());
-            ps.setDouble(3,pedido.getCantidadPago());
-            ps.setString(4,pedido.getStatus());
-            ps.setString(5,pedido.getNombreUsuario().getNombreUsuario());
-            ps.setInt(6,pedido.getIdDireccion().getId());
-            ps.setInt(7,pedido.getIdSucursal().getIdSucursal());
-
+            ps.setString(1,pedido.getIdPedido().getFecha());
+            ps.setDouble(2,pedido.getIdPedido().getCostoTotal());
+            ps.setDouble(3,pedido.getIdPedido().getCantidadPago());
+            ps.setString(4,"Preparación");
+            ps.setString(5,pedido.getIdPedido().getNombreUsuario().getNombreUsuario());
+            ps.setInt(6,pedido.getIdPedido().getIdDireccion().getId());
+            ps.setInt(7, 1);
             flag = ps.executeUpdate() == 1;
-
+            System.out.println(flag);
             if(flag){
                 con.commit();
-
-                try(ResultSet generatedKeys = ps.getGeneratedKeys()){
-                    if(generatedKeys.next()){
+                PedidoTienePlatilloDao platillos = new PedidoTienePlatilloDao();
+                try(ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()){
                         int idRecobery = generatedKeys.getInt(1);
                         pedidoInsert = pedido;
-                        pedidoInsert.setId(idRecobery);
-                    }else{
+                        pedidoInsert.getIdPedido().setId(idRecobery);
+                        System.out.println(pedidoInsert.getIdPedido().getId());
+                        if (pedidoInsert.getIdPedido().getId() > 0) { //Validamos que si se haya registrado y asignado un id correctamente
+                            int size = pedidoInsert.getPedidoplatillos().size();
+                            int platillosRegistrados = 0;
+                            for (int i = 0; i < size; i++) {
+                                pedidoInsert.getPedidoplatillos().get(i).setIdPedido(pedidoInsert.getIdPedido());
+                                flag = platillos.createPedidoTienePlatillo(pedidoInsert.getPedidoplatillos().get(i));
+                                if (flag) { //Validamos que se haya registrado este platillo
+                                    platillosRegistrados++;
+                                }
+                            }
+                            System.out.println("size ->> " + size);
+                            System.out.println("platillosRegistrados --> "+ platillosRegistrados);
+                            if (size == platillosRegistrados) {
+                                 //Confirmamos cambios hasta que todos los platillos del pedido hayan sido registrados
+                            }
+                        }
+                    } else {
                         throw new SQLException("ERROR CREATE PEDIDO");
                     }
                 }
             }
-
         }catch(Exception e){
             System.err.println("ERROR CREATE PEDIDO" + e.getMessage());
             con.rollback();
@@ -349,7 +363,6 @@ public class PedidoDao {
             if (rs != null) rs.close();
             if (con != null) con.close();
         }
-
         return pedidoInsert;
     }
 

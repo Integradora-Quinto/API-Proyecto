@@ -209,11 +209,11 @@ public class ServicePedido {
     @Path("/pedidos")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public MyResponse createPedido(Pedido pedido) throws SQLException {
+    public MyResponse createPedido(PedidoCompleto pedido) throws SQLException {
         MyResponse response = new MyResponse();
 
-        Pedido pedidoInsert = (new PedidoDao().createPedido(pedido));
-        if (pedidoInsert.getId() > 0) {
+        PedidoCompleto pedidoInsert = (new PedidoDao().createPedido(pedido));
+        if (pedidoInsert.getIdPedido().getId() > 0) {
             response.setCode(200);
             response.setStatus("success");
             response.setMessage("PEDIDO CREATED");
@@ -224,7 +224,6 @@ public class ServicePedido {
             response.setMessage("PEDIDO NOT CREATED");
             response.setData(null);
         }
-
         return response;
     }
 

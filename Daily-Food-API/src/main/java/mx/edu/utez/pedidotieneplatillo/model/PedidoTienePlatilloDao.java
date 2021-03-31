@@ -80,40 +80,30 @@ public class PedidoTienePlatilloDao {
 
     public boolean createPedidoTienePlatillo(PedidoTienePlatillo pedidoTienePlatillo) throws SQLException{
        boolean flag = false;
-
+        System.out.println("idPedido: " + pedidoTienePlatillo.getIdPedido());
+        System.out.println("idPlatilloMenu: " + pedidoTienePlatillo.getIdMenuPlatillo().getIdPlatilloMenu());
+        System.out.println("cantidad " + pedidoTienePlatillo.getCantidad());
+        System.out.println("comentario " + pedidoTienePlatillo.getComentario());
        try{
             con = ConnectionDB.getConnection();
             con.setAutoCommit(false);
             ps = con.prepareStatement("INSERT INTO pedidotieneplatillo (idPedido,idMenuPlatillo,cantidad,comentario)  VALUES (?,?,?,?)");
             ps.setInt(1 , pedidoTienePlatillo.getIdPedido().getId());
-            ps.setInt(2, pedidoTienePlatillo.getIdMenuPlatillo().getIdMenu().getIdMenu());
+            ps.setInt(2, pedidoTienePlatillo.getIdMenuPlatillo().getIdPlatilloMenu());
             ps.setInt(3,pedidoTienePlatillo.getCantidad());
             ps.setString(4,pedidoTienePlatillo.getComentario());
-
             flag = ps.executeUpdate() == 1 ;
-
-            if(flag){
+           if(flag){
                 con.commit();
             }
-
        }catch(Exception e){
            con.rollback();
-           System.err.println("ERROR PEDIDO TIENE PROMOCION  "+e.getMessage());
+           System.err.println("ERROR PEDIDO TIENE PLATILLO  "+e.getMessage());
        }finally{
-           if(rs != null){
-               rs.close();
-           }
-
-           if( ps != null){
-             ps.close();
-           }
-
-           if(con != null){
-               con.close();
-           }
-
+           if(rs != null){rs.close();}
+           if( ps != null){ ps.close();}
+           if(con != null){ con.close();}
        }
-
        return flag;
     }
 
