@@ -1,6 +1,7 @@
 package mx.edu.utez.pedido.model;
 
 import mx.edu.utez.direccion.model.Direccion;
+import mx.edu.utez.pedidotieneplatillo.model.PedidoTienePlatillo;
 import mx.edu.utez.sucursal.model.Sucursal;
 import mx.edu.utez.usuario.model.Usuario;
 

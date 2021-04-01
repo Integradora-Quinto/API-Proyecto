@@ -1,6 +1,7 @@
 package mx.edu.utez.platilloenmenu.model;
 
 import mx.edu.utez.menu.model.MenuDao;
+import mx.edu.utez.platillo.model.PlatilloCompleto;
 import mx.edu.utez.platillo.model.PlatilloDao;
 import mx.edu.utez.tools.ConnectionDB;
 
@@ -10,21 +11,23 @@ import java.util.List;
 
 public class PlatilloEnMenuDao {
 
-    public List getPlatillosEnMenu(){
+    public List getPlatillosEnMenu(int idMenu){
         ArrayList<PlatilloEnMenu> platillosEnMenu = new ArrayList();
         try{
             Connection con = ConnectionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT  * FROM platilloEnMenu");
+            PreparedStatement ps = con.prepareStatement("SELECT  * FROM platilloEnMenu WHERE idMenuPlatillo = ?");
+            ps.setInt(1, idMenu);
             ResultSet rs = ps.executeQuery();
+            MenuDao menu = new MenuDao();
+            PlatilloDao daoPlatillo = new PlatilloDao();
             while(rs.next()) {
                 PlatilloEnMenu platilloEnMenu = new PlatilloEnMenu();
-                MenuDao menu = new MenuDao();
-                PlatilloDao platillo = new PlatilloDao();
                 platilloEnMenu.setIdPlatilloMenu(rs.getInt(1));
                 platilloEnMenu.setCantidadEstimada(rs.getInt(2));
                 platilloEnMenu.setStatus(rs.getBoolean(3));
                 platilloEnMenu.setIdMenu(menu.getMenuById(rs.getInt(4)));
-                platilloEnMenu.setIdPlatillo(platillo.getPlatilloById(rs.getInt(5)));
+                platilloEnMenu.setIdPlatillo2(daoPlatillo.getPlatilloCompletoById(rs.getInt(5)));
+                platilloEnMenu.setIdPlatillo(daoPlatillo.getPlatilloById(rs.getInt(5)));
                 platillosEnMenu.add(platilloEnMenu);
             }
             rs.close();

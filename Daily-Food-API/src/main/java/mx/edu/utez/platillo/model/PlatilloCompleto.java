@@ -16,6 +16,16 @@ public class PlatilloCompleto {
     private List<IngredientePlatillo> ingredientes;
     private ImagenPlatillo imagen;
     private TipoPlatillo tipoPlatillo;
+    private int idMenuPlatillo;
+
+    public int getIdMenuPlatillo() {
+        return idMenuPlatillo;
+    }
+
+    public void setIdMenuPlatillo(int idMenuPlatillo) {
+        this.idMenuPlatillo = idMenuPlatillo;
+    }
+
 
     public PlatilloCompleto() {
     }
