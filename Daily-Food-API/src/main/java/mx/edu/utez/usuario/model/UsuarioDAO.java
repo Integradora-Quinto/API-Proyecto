@@ -1,5 +1,6 @@
 package mx.edu.utez.usuario.model;
 
+import mx.edu.utez.persona.model.Persona;
 import mx.edu.utez.persona.model.PersonaDAO;
 import mx.edu.utez.rol.model.Rol;
 import mx.edu.utez.rol.model.RolDAO;
@@ -201,6 +202,39 @@ public class UsuarioDAO {
                 actualizado = getUsuarioByUser(usuario.getNombreUsuario());
             }
             if (ps != null) ps.close();
+        }  catch (Exception e) {
+            con.rollback();
+            e.getMessage();
+            e.printStackTrace();
+        } finally {
+            if (con != null)  con.close();
+        }
+        return actualizado;
+    }
+
+    public Usuario updateUsuarioWithoutContrasenia(Usuario usuario) throws SQLException {
+        Usuario actualizado = new Usuario();
+        Connection con = null;
+        try {
+            con = ConnectionDB.getConnection();
+            con.setAutoCommit(false);
+            PreparedStatement ps = con.prepareStatement("UPDATE `usuario` SET `correo` = ?, `telefono` = ?, `idRol`=? WHERE `nombreUsuario` LIKE ?");
+            Persona persona = (new PersonaDAO().updatePersona(usuario.getIdPersona()));
+
+            ps.setString(1, usuario.getCorreo());
+            ps.setString(2, usuario.getTelefono());
+            ps.setInt(3, usuario.getIdRol().getIdRol());
+            ps.setString(4,usuario.getNombreUsuario());
+
+            boolean updated = ps.executeUpdate() == 1;
+
+            if (updated) {
+                con.commit();
+                actualizado = getUsuarioByUser(usuario.getNombreUsuario());
+            }
+
+            if (ps != null) ps.close();
+
         }  catch (Exception e) {
             con.rollback();
             e.getMessage();
