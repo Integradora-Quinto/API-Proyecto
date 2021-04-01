@@ -195,6 +195,27 @@ public class ServiceUsuario {
         return resp;
     }
 
+    @PUT
+    @Path("/usuarios/sinpass")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public MyResponse updateUsuario2(Usuario usuario) throws SQLException {
+        MyResponse resp = new MyResponse();
+
+        Usuario actualizado = (new UsuarioDAO().updateUsuarioWithoutContrasenia(usuario));
+        if ((!usuario.getNombreUsuario().isEmpty()) || usuario.getNombreUsuario() != null) {
+            resp.setCode(200);
+            resp.setMessage("Usuario actualizado");
+            resp.setStatus("success");
+            resp.setData(actualizado);
+        } else {
+            resp.setCode(400);
+            resp.setMessage("Error, no se actualizó.");
+            resp.setStatus("error");
+        }
+        return resp;
+    }
+
     @DELETE
     @Path("/usuarios/{user}")
     @Produces(MediaType.APPLICATION_JSON)

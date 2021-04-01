@@ -5,7 +5,8 @@ import mx.edu.utez.rol.model.Rol;
 
 public class MyRequestRol {
     private Rol rol;
-    //private MyToken token;
+
+//    private MyToken token;
 
     public Rol getRol() {
         return rol;
@@ -14,6 +15,7 @@ public class MyRequestRol {
     public void setRol(Rol rol) {
         this.rol = rol;
     }
+
 
     /*public MyToken getToken() {
         return token;
