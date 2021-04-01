@@ -20,29 +20,32 @@ public class PlatilloDao {
     PreparedStatement ps;
 
     public List getPlatillo() throws SQLException {
-        ArrayList<Platillo> list = new ArrayList();
+        ArrayList<PlatilloCompleto> platillos = new ArrayList();
         try{
             con = ConnectionDB.getConnection();
-            ps = con.prepareStatement("SELECT * FROM platillo;");
+            ps = con.prepareStatement("SELECT p.idplatillo, i.idimagenplatillo FROM platillo p INNER JOIN imagenplatillo i ON p.idplatillo = i.idplatillo;");
             rs = ps.executeQuery();
-            TipoPlatilloDao tipoPlatilloDao = new TipoPlatilloDao();
+            PrecioDao precioDao = new PrecioDao();
+            ImagenPlatilloDAO imagenDao = new ImagenPlatilloDAO();
             while(rs.next()){
-                Platillo platillo = new Platillo();
-                platillo.setIdPlatillo(rs.getInt(1));
-                platillo.setNombrePlatillo(rs.getString(2));
-                platillo.setTiempoPreparacion(rs.getInt(3));
-                platillo.setDescripcion(rs.getString(4));
-                platillo.setIdTipoPlatillo(tipoPlatilloDao.getTipoPlatilloById(rs.getInt(5)));
-                list.add(platillo);
+                System.out.println(rs.getInt(1) + rs.getInt(2));
+                PlatilloCompleto platilloCompleto = new PlatilloCompleto();
+                Platillo platillo = this.getPlatilloById(rs.getInt(1));
+                platilloCompleto.setPrecio(precioDao.getPrecioByPlatillo(platillo.getIdPlatillo()));
+                platilloCompleto.getPrecio().setIdPlatillo(null);
+                platilloCompleto.setImagen(imagenDao.getImagenPlatilloById(rs.getInt(2)));
+                platilloCompleto.getImagen().setIdPlatillo(null);
+                platilloCompleto.setPlatillo(platillo);
+                platillos.add(platilloCompleto);
             }
         }catch(Exception e){
             System.err.println(e.getMessage());
         }finally{
             if(con!=null) con.close();
-            if(rs!=null)rs.close();
             if(ps!=null)ps.close();
+            if(rs!=null)rs.close();
         }
-        return list;
+        return platillos;
     }
 
     public PlatilloCompleto getPlatilloCompletoById(int id) throws SQLException{
@@ -50,7 +53,7 @@ public class PlatilloDao {
         try{
             con = ConnectionDB.getConnection();
             ps = con.prepareStatement("SELECT p.idPlatillo, img.idImagenPlatillo FROM platillo p\n" +
-                    "INNER JOIN imagenPlatillo img ON p.idPlatillo = img.idPlatillo WHERE p.idPlatillo = ?");
+                    "INNER JOIN imagenplatillo img ON p.idPlatillo = img.idPlatillo WHERE p.idPlatillo = ?");
             ps.setInt(1, id);
             rs = ps.executeQuery();
             PlatilloDao dao = new PlatilloDao();
