@@ -17,7 +17,7 @@ public class MenuDao {
         List<PlatilloCompleto> platillos = new ArrayList();
         try{
             Connection con = ConnectionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT pem.idPlatillo, pem.idMenuPlatillo, m.idMenu, md.idMenuDia FROM platilloenmenu pem \n" +
+            PreparedStatement ps = con.prepareStatement("SELECT pem.idplatillo, pem.idMenuPlatillo, m.idMenu, md.idMenuDia FROM platilloenmenu pem \n" +
                     "INNER JOIN menu m ON pem.idMenu = m.idMenu\n" +
                     "INNER JOIN menudia md on m.idMenu = md.idMenu\n" +
                     "WHERE md.fecha = curdate()\n" +
@@ -25,10 +25,11 @@ public class MenuDao {
                     "AND md.status = 1;");
             ResultSet rs = ps.executeQuery();
             PlatilloDao platDao = new PlatilloDao();
+            MenuDao menuDao = new MenuDao();
             while(rs.next()){
                 System.out.println("IDMENU DIA :> " + rs.getInt(4));
                 System.out.println("ID MENU :> " + rs.getInt(3));
-                menu = (this.getMenuById(rs.getInt(3)));
+                menu = menuDao.getMenuById(rs.getInt(3));
                 PlatilloCompleto platillo = platDao.getPlatilloCompletoById(rs.getInt(1));
                 platillo.setIdMenuPlatillo(rs.getInt(2));
                 platillo.setIngredientes(null);
