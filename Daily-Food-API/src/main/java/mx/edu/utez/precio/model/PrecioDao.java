@@ -60,6 +60,30 @@ public class PrecioDao {
         return precio;
     }
 
+    public Precio getPrecioById(int idPlatillo) throws SQLException{
+        Precio precio = new Precio();;
+        try{
+            con = ConnectionDB.getConnection();
+            ps = con.prepareStatement("SELECT * FROM precio WHERE idprecio = ?;");
+            ps.setInt(1, idPlatillo);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+
+                PlatilloDao platilloD = new PlatilloDao();
+                precio.setIdPrecio(rs.getInt(1));
+                precio.setPrecio(rs.getDouble(2));
+                precio.setIdPlatillo(platilloD.getPlatilloById(rs.getInt(3)));
+            }
+        }catch (Exception e){
+            System.err.println("Error msg: " + e.getMessage());
+        }finally {
+            con.close();
+            rs.close();
+            ps.close();
+        }
+        return precio;
+    }
+
     public Precio createPrecio(Precio precio) throws SQLException{
         Precio precioCreated = new Precio();
         boolean flag = false;

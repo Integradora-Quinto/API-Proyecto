@@ -11,6 +11,7 @@ import mx.edu.utez.tools.ConnectionDB;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PlatilloDao {
@@ -105,6 +106,36 @@ public class PlatilloDao {
         }
 
         return platillo;
+    }
+
+    public List getPlatillosForSetPrecio() throws SQLException {
+        ArrayList list = new ArrayList();
+        try{
+            con = ConnectionDB.getConnection();
+            ps = con.prepareStatement("SELECT P.idplatillo,I.idimagenplatillo ,PC.idprecio FROM platillo P \n" +
+                    "\tLEFT JOIN imagenplatillo I ON P.idplatillo = I.idplatillo\n" +
+                    "    LEFT JOIN precio PC ON P.idplatillo = PC.idplatillo\n" +
+                    "    ORDER BY P.idplatillo;");
+            rs = ps.executeQuery();
+            PlatilloDao platilloDao = new PlatilloDao();
+            ImagenPlatilloDAO imagenPlatilloDAO = new ImagenPlatilloDAO();
+            PrecioDao precioDao = new PrecioDao();
+            while(rs.next()){
+                HashMap map = new HashMap();
+                map.put("platillo",platilloDao.getPlatilloById(rs.getInt(1)));
+                map.put("imagen",imagenPlatilloDAO.getImagenPlatilloById(rs.getInt(2)));
+//                int id = rs.getInt(3) > 0 ?  : 0;
+                map.put("precio",precioDao.getPrecioById(rs.getInt(3)));
+                list.add(map);
+            }
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }finally{
+            if(con!=null) con.close();
+            if(rs!=null)rs.close();
+            if(ps!=null)ps.close();
+        }
+        return list;
     }
 
     public boolean createPlatillo(PlatilloCompleto platillo) throws SQLException{
