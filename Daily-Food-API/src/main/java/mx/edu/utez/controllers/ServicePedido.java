@@ -251,6 +251,27 @@ public class ServicePedido {
     }
 
     @PUT
+    @Path("/pedidos/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public MyResponse changeStatus(Pedido pedido) throws SQLException {
+        MyResponse response = new MyResponse();
+        boolean flag = (new PedidoDao().changeStatus(pedido));
+        if (flag) {
+            response.setCode(200);
+            response.setStatus("SUCCESS");
+            response.setMessage("STATUS CHANGED");
+            response.setData(flag);
+        } else {
+            response.setCode(400);
+            response.setStatus("ERROR");
+            response.setMessage("STATUS NOT CHANGED");
+            response.setData(flag);
+        }
+        return response;
+    }
+
+    @PUT
     @Path("/cancelar.pedido/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

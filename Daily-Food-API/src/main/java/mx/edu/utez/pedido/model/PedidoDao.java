@@ -397,6 +397,32 @@ public class PedidoDao {
         return flag;
     }
 
+    public boolean changeStatus(Pedido pedido)throws SQLException{
+        boolean changed = false;
+        System.out.println("Status: " + pedido.getStatus());
+        System.out.println("ID: " + pedido.getId());
+        try{
+            con = ConnectionDB.getConnection();
+            con.setAutoCommit(false);
+            ps = con.prepareStatement("UPDATE pedido SET `status` = ? WHERE  `idPedido` = ?;");
+            ps.setString(1, pedido.getStatus());
+            ps.setDouble(2,pedido.getId());
+            changed = ps.executeUpdate() == 1;
+            System.out.println("Chnaged : "+changed);
+            if(changed){
+                con.setAutoCommit(true);
+            }
+        }catch(Exception e){
+            System.err.println("ERROR EN ACTUALIZAR STATUS AL PEDIDO -> " + e.getMessage());
+            con.rollback();
+        }finally {
+            if (ps != null) ps.close();
+            if (rs != null) rs.close();
+            if (con != null) con.close();
+        }
+        return changed;
+    }
+
     public boolean cancelarPedido(int id) throws SQLException {
         boolean flag = false;
 
