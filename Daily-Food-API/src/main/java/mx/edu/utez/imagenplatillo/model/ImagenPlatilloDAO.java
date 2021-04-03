@@ -12,6 +12,7 @@ import java.util.Base64;
 import java.util.List;
 
 public class ImagenPlatilloDAO {
+
     public List<ImagenPlatillo> getImagenes() {
         ArrayList<ImagenPlatillo> imagenes = new ArrayList<>();
         try {
