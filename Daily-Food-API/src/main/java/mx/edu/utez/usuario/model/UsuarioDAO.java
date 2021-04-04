@@ -91,13 +91,12 @@ public class UsuarioDAO {
             RolDAO rolDAO = new RolDAO();
             while (rs.next()) {
                 if (rs != null) {
-
                     usuario.setNombreUsuario(rs.getString(1));
                     usuario.setContrasenia("PRIVATE");
                     usuario.setToken(rs.getInt(3));
                     usuario.setCorreo(rs.getString(4));
                     usuario.setTelefono(rs.getString(5));
-                    usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(6)));
+                    usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(7)));
                     usuario.setIdRol(rolDAO.getRolById(rs.getInt(7)));
                 }
             }
