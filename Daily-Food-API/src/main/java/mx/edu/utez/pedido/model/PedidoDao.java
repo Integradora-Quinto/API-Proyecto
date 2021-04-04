@@ -315,14 +315,15 @@ public class PedidoDao {
         try{
             con = ConnectionDB.getConnection();
             con.setAutoCommit(false);
-            ps = con.prepareStatement("INSERT INTO pedido (fecha, costoTotal, cantidadPago, status, nombreUsuario, idDireccion, idSucursal) VALUES (?,?,?,?,?,?,?);" , Statement.RETURN_GENERATED_KEYS);
+            ps = con.prepareStatement("INSERT INTO pedido (fecha, costoTotal, cantidadPago, status, comentario, nombreUsuario, idDireccion, idSucursal) VALUES (?,?,?,?,?,?,?,?);" , Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,pedido.getIdPedido().getFecha());
             ps.setDouble(2,pedido.getIdPedido().getCostoTotal());
             ps.setDouble(3,pedido.getIdPedido().getCantidadPago());
             ps.setString(4,"Preparación");
-            ps.setString(5,pedido.getIdPedido().getNombreUsuario().getNombreUsuario());
-            ps.setInt(6,pedido.getIdPedido().getIdDireccion().getId());
-            ps.setInt(7, 1);
+            ps.setString(5, pedido.getIdPedido().getComentario());
+            ps.setString(6,pedido.getIdPedido().getNombreUsuario().getNombreUsuario());
+            ps.setInt(7,pedido.getIdPedido().getIdDireccion().getId());
+            ps.setInt(8, 1);
             flag = ps.executeUpdate() == 1;
             System.out.println(flag);
             if(flag){
@@ -410,7 +411,7 @@ public class PedidoDao {
             changed = ps.executeUpdate() == 1;
             System.out.println("Chnaged : "+changed);
             if(changed){
-                con.setAutoCommit(true);
+                con.commit();
             }
         }catch(Exception e){
             System.err.println("ERROR EN ACTUALIZAR STATUS AL PEDIDO -> " + e.getMessage());

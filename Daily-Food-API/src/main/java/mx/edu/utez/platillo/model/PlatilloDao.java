@@ -20,7 +20,7 @@ public class PlatilloDao {
     ResultSet rs;
     PreparedStatement ps;
 
-    public List getPlatillo() throws SQLException {
+    public List getPlatillos() throws SQLException {
         ArrayList<PlatilloCompleto> platillos = new ArrayList();
         try{
             con = ConnectionDB.getConnection();
@@ -29,7 +29,6 @@ public class PlatilloDao {
             PrecioDao precioDao = new PrecioDao();
             ImagenPlatilloDAO imagenDao = new ImagenPlatilloDAO();
             while(rs.next()){
-                System.out.println(rs.getInt(1) + rs.getInt(2));
                 PlatilloCompleto platilloCompleto = new PlatilloCompleto();
                 Platillo platillo = this.getPlatilloById(rs.getInt(1));
                 platilloCompleto.setPrecio(precioDao.getPrecioByPlatillo(platillo.getIdPlatillo()));
@@ -40,11 +39,11 @@ public class PlatilloDao {
                 platillos.add(platilloCompleto);
             }
         }catch(Exception e){
-            System.err.println(e.getMessage());
+            System.err.println("ERROR GET PLATILLOS " + e.getMessage());
         }finally{
             if(con!=null) con.close();
-            if(ps!=null)ps.close();
             if(rs!=null)rs.close();
+            if(ps!=null)ps.close();
         }
         return platillos;
     }

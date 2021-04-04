@@ -79,25 +79,19 @@ public class PonderacionDao {
             ps.setInt(1,ponderacion.getPonderacion());
             ps.setString(2,ponderacion.getComentario());
             ps.setInt(3,ponderacion.getIdPedido().getId());
-
             flag = ps.executeUpdate() == 1;
-
             if(flag){
                 con.commit();
                 try(ResultSet generatedKeys = ps.getGeneratedKeys()){
-
                     if(generatedKeys.next()){
                         int idRecobery = generatedKeys.getInt(1);
                         ponderacionInsert = ponderacion;
                         ponderacionInsert.setId(idRecobery);
-
                     }else{
                         throw new  SQLException ("ERROR PONDERACION CREATE");
                     }
-
                 }
             }
-
         } catch (Exception e) {
             System.err.println("ERROR PONDERACION CREATE "+e.getMessage());
             con.rollback();
@@ -106,7 +100,6 @@ public class PonderacionDao {
             if (rs != null) rs.close();
             if (con != null) con.close();
         }
-
         return ponderacionInsert;
     }
 

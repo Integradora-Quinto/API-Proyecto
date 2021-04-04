@@ -48,9 +48,9 @@ public class PersonaDAO {
                     persona.setSegundoApellido(rs.getString(4));
                 }
             }
-            if (con!=null) con.close();
-            if (ps!=null) ps.close();
             if (rs!=null) rs.close();
+            if (ps!=null) ps.close();
+            if (con!=null) con.close();
         } catch (Exception e) {
             e.getMessage();
             e.printStackTrace();

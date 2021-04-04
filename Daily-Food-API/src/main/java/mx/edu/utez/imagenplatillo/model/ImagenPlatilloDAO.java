@@ -55,8 +55,8 @@ public class ImagenPlatilloDAO {
                 }
             }
             if (con != null) con.close();
-            if (ps != null) ps.close();
             if (rs != null) rs.close();
+            if (ps != null) ps.close();
         } catch (Exception e) {
             e.getMessage();
             e.printStackTrace();

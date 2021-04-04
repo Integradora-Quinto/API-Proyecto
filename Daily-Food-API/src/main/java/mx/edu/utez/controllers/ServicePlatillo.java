@@ -19,7 +19,7 @@ public class ServicePlatillo {
     @Produces(MediaType.APPLICATION_JSON)
     public MyResponse getPlatillos() throws SQLException{
         MyResponse response = new MyResponse();
-        List list = (new PlatilloDao().getPlatillo());
+        List list = (new PlatilloDao().getPlatillos());
         if(list.size() > 0){
             response.setCode(200);
             response.setStatus("success");
