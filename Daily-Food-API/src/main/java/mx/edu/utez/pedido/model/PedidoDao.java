@@ -284,6 +284,26 @@ public class PedidoDao {
         return pedido;
     }
 
+    public String getStatusByPedido(int idPedido) throws SQLException{
+        String status = null;
+        try{
+            con = ConnectionDB.getConnection();
+            ps = con.prepareStatement("SELECT status from pedido WHERE idPedido =  ?");
+            ps.setInt(1, idPedido);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                status = rs.getString(1);
+            }
+        }catch (Exception err){
+            System.err.println("Error al traer el status " + err.getMessage());
+        }finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        }
+        return status;
+    }
+
     public PedidoCompleto createPedido(PedidoCompleto pedido) throws SQLException {
         PedidoCompleto pedidoInsert = new PedidoCompleto();
         boolean flag = false;

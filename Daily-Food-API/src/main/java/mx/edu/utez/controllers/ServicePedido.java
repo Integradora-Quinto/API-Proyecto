@@ -205,6 +205,25 @@ public class ServicePedido {
         return response;
     }
 
+    @GET
+    @Path("/pedidos/status/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MyResponse getStatusFromPedido(@PathParam("id") int id) throws SQLException{
+        MyResponse response = new MyResponse();
+        String status = (new PedidoDao().getStatusByPedido(id));
+        response.setData(status);
+        if(status != null){
+            response.setCode(200);
+            response.setStatus("SUCCESS");
+            response.setMessage("Se recuperó el status correctamente");
+        }else{
+            response.setCode(400);
+            response.setStatus("ERROR");
+            response.setMessage("No se recuperó el status");
+        }
+        return response;
+    }
+
     @POST
     @Path("/pedidos")
     @Produces(MediaType.APPLICATION_JSON)
