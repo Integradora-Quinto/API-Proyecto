@@ -68,7 +68,6 @@ public class PedidoTienePlatilloDao {
                 list.add(object);
             }
         }catch(Exception e){
-            con.rollback();
             System.err.println("ERROR PEDIDO TIENE PROMOCION  "+e.getMessage());
         }finally{
             if(rs != null){rs.close();}
@@ -106,7 +105,5 @@ public class PedidoTienePlatilloDao {
        }
        return flag;
     }
-
-
 
 }

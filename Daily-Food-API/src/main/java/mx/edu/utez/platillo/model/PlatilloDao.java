@@ -20,7 +20,8 @@ public class PlatilloDao {
     ResultSet rs;
     PreparedStatement ps;
 
-    public List getPlatillo() throws SQLException {
+
+    public List getPlatillos() throws SQLException {
         ArrayList<PlatilloCompleto> platillos = new ArrayList();
         try{
             con = ConnectionDB.getConnection();
@@ -40,7 +41,7 @@ public class PlatilloDao {
                 platillos.add(platilloCompleto);
             }
         }catch(Exception e){
-            System.err.println(e.getMessage());
+            System.err.println("ERROR GET PLATILLOS " + e.getMessage());
         }finally{
             if(con!=null) con.close();
             if(ps!=null)ps.close();

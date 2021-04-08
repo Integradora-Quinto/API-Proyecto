@@ -12,6 +12,7 @@ import java.util.Base64;
 import java.util.List;
 
 public class ImagenPlatilloDAO {
+
     public List<ImagenPlatillo> getImagenes() {
         ArrayList<ImagenPlatillo> imagenes = new ArrayList<>();
         try {
@@ -54,8 +55,8 @@ public class ImagenPlatilloDAO {
                 }
             }
             if (con != null) con.close();
-            if (ps != null) ps.close();
             if (rs != null) rs.close();
+            if (ps != null) ps.close();
         } catch (Exception e) {
             e.getMessage();
             e.printStackTrace();

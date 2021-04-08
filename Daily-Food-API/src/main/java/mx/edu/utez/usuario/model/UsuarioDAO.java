@@ -93,7 +93,6 @@ public class UsuarioDAO {
             RolDAO rolDAO = new RolDAO();
             while (rs.next()) {
                 if (rs != null) {
-
                     usuario.setNombreUsuario(rs.getString(1));
                     usuario.setContrasenia("PRIVATE");
                     usuario.setToken(rs.getInt(3));

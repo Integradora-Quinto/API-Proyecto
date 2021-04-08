@@ -43,7 +43,7 @@ public class PlatilloEnMenuDao {
         PlatilloEnMenu platilloMenu = new PlatilloEnMenu();
         try{
             Connection con = ConnectionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM platilloEnMenu WHERE idMenuPlatillo = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM platilloenmenu WHERE idMenuPlatillo = ?");
             ps.setInt(1, idPlatilloEnMenu);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -70,7 +70,7 @@ public class PlatilloEnMenuDao {
         try{
             con = ConnectionDB.getConnection();
             con.setAutoCommit(false);
-            PreparedStatement ps = con.prepareStatement("INSERT INTO platilloEnMenu (`cantidadEstimada`, `status`, " +
+            PreparedStatement ps = con.prepareStatement("INSERT INTO platilloenmenu (`cantidadEstimada`, `status`, " +
                     "`idMenu`, `idPlatillo`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, platilloInsert.getCantidadEstimada());
             ps.setBoolean(2, platilloInsert.isStatus());
@@ -106,7 +106,7 @@ public class PlatilloEnMenuDao {
         try{
             con = ConnectionDB.getConnection();
             con.setAutoCommit(false);
-            PreparedStatement ps = con.prepareStatement("UPDATE platilloEnMenu SET cantidadEstimada = ?," +
+            PreparedStatement ps = con.prepareStatement("UPDATE platilloenmenu SET cantidadEstimada = ?," +
                     " status = ?, idMenu = ?, idPlatillo = ? WHERE idMenuPlatillo = ?");
             ps.setInt(1, newPlatilloEnMenu.getCantidadEstimada());
             ps.setBoolean(2, newPlatilloEnMenu.isStatus());

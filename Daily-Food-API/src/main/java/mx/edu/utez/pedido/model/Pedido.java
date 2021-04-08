@@ -18,6 +18,15 @@ public class Pedido {
     private Usuario nombreUsuario;
     private Direccion  idDireccion;
     private Sucursal idSucursal;
+    private String comentario;
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
 
     public Pedido(){
 
