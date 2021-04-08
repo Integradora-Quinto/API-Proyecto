@@ -32,15 +32,16 @@ public class UsuarioDAO {
                     usuario.setToken(rs.getInt(3));
                     usuario.setCorreo(rs.getString(4));
                     usuario.setTelefono(rs.getString(5));
-                    usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(6)));
-                    usuario.setIdRol(rolDAO.getRolById(rs.getInt(7)));
+                    usuario.setStatus(rs.getBoolean(6));
+                    usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(7)));
+                    usuario.setIdRol(rolDAO.getRolById(rs.getInt(8)));
                     usuarios.add(usuario);
 
                 }
             }
-            if (con!=null) con.close();
-            if (ps!=null) ps.close();
             if (rs!=null) rs.close();
+            if (ps!=null) ps.close();
+            if (con!=null) con.close();
         } catch (Exception e) {
             e.getMessage();
             e.printStackTrace();
@@ -64,15 +65,16 @@ public class UsuarioDAO {
                     usuario.setToken(rs.getInt(3));
                     usuario.setCorreo(rs.getString(4));
                     usuario.setTelefono(rs.getString(5));
-                    usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(6)));
-                    usuario.setIdRol(rolDAO.getRolById(rs.getInt(7)));
+                    usuario.setStatus(rs.getBoolean(6));
+                    usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(7)));
+                    usuario.setIdRol(rolDAO.getRolById(rs.getInt(8)));
                     usuarios.add(usuario);
 
                 }
             }
-            if (con!=null) con.close();
-            if (ps!=null) ps.close();
             if (rs!=null) rs.close();
+            if (ps!=null) ps.close();
+            if (con!=null) con.close();
         } catch (Exception e) {
             e.getMessage();
             e.printStackTrace();
@@ -97,13 +99,14 @@ public class UsuarioDAO {
                     usuario.setToken(rs.getInt(3));
                     usuario.setCorreo(rs.getString(4));
                     usuario.setTelefono(rs.getString(5));
-                    usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(6)));
-                    usuario.setIdRol(rolDAO.getRolById(rs.getInt(7)));
+                    usuario.setStatus(rs.getBoolean(6));
+                    usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(7)));
+                    usuario.setIdRol(rolDAO.getRolById(rs.getInt(8)));
                 }
             }
-            if (con!=null) con.close();
-            if (ps!=null) ps.close();
             if (rs!=null) rs.close();
+            if (ps!=null) ps.close();
+            if (con!=null) con.close();
         } catch (Exception e) {
             e.getMessage();
             e.printStackTrace();
@@ -131,13 +134,13 @@ public class UsuarioDAO {
                     usuarioLogin.setNombreUsuario(rs.getString(1));
                     usuarioLogin.setContrasenia("PRIVATE");
                     usuarioLogin.setToken(rs.getInt(3));
-                    usuarioLogin.setIdPersona(personaDAO.getPersonaById(rs.getInt(6)));
-                    usuarioLogin.setIdRol(rolDAO.getRolById(rs.getInt(7)));
+                    usuarioLogin.setIdPersona(personaDAO.getPersonaById(rs.getInt(7)));
+                    usuarioLogin.setIdRol(rolDAO.getRolById(rs.getInt(8)));
                 }
             }
-            if (con!=null) con.close();
-            if (ps!=null) ps.close();
             if (rs!=null) rs.close();
+            if (ps!=null) ps.close();
+            if (con!=null) con.close();
         } catch (Exception e) {
             e.getMessage();
             e.printStackTrace();
@@ -151,7 +154,7 @@ public class UsuarioDAO {
         try {
             con = ConnectionDB.getConnection();
             con.setAutoCommit(false);
-            PreparedStatement ps = con.prepareStatement("INSERT INTO `usuario`(`nombreUsuario`, `contrasenia`, `token`,`correo`,`telefono`, `idPersona`, `idRol`) VALUES(?,?,?,?,?,?,?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO `usuario`(`nombreusuario`, `contrasenia`, `token`,`correo`,`telefono`,`status`,`idpersona`,`idrol`) VALUES(?,?,?,?,?,?,?,?)");
             ps.setString(1, usuario.getNombreUsuario());
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(usuario.getContrasenia().getBytes(Charset.forName("UTF-8")));
@@ -161,8 +164,9 @@ public class UsuarioDAO {
             ps.setInt(3, usuario.getToken());//Ahorita solo es ejemplo xD
             ps.setString(4,usuario.getCorreo());
             ps.setString(5,usuario.getTelefono());
-            ps.setInt(6, usuario.getIdPersona().getIdPersona());
-            ps.setInt(7, usuario.getIdRol().getIdRol());
+            ps.setBoolean(6,usuario.isStatus());
+            ps.setInt(7, usuario.getIdPersona().getIdPersona());
+            ps.setInt(8, usuario.getIdRol().getIdRol());
 
             boolean created = ps.executeUpdate() == 1;
             if (created) {
@@ -170,8 +174,8 @@ public class UsuarioDAO {
                 nuevo = usuario;
                 nuevo.setContrasenia("PRIVATE");
             }
-            if (con!=null) con.close();
             if (ps!=null) ps.close();
+            if (con!=null) con.close();
         }  catch (Exception e) {
             con.rollback();
             e.getMessage();
@@ -180,6 +184,7 @@ public class UsuarioDAO {
         return nuevo;
     }
 
+    //Este método no se ha implementado ya que permite el cambio de contraseña
     public Usuario updateUsuario(Usuario usuario) throws SQLException {
         Usuario actualizado = new Usuario();
         Connection con = null;
@@ -245,6 +250,37 @@ public class UsuarioDAO {
         return actualizado;
     }
 
+    //Para eliminaciones lógicas
+    public Usuario updateStatus(Usuario usuario) throws SQLException {
+        Usuario actualizado = new Usuario();
+        Connection con = null;
+        try {
+            con = ConnectionDB.getConnection();
+            con.setAutoCommit(false);
+            PreparedStatement ps = con.prepareStatement("UPDATE `usuario` SET `status` = ? WHERE `nombreUsuario` LIKE ?");
+
+            ps.setBoolean(1, usuario.isStatus());
+            ps.setString(2,usuario.getNombreUsuario());
+
+            boolean updated = ps.executeUpdate() == 1;
+
+            if (updated) {
+                con.commit();
+                actualizado = getUsuarioByUser(usuario.getNombreUsuario());
+            }
+
+            if (ps != null) ps.close();
+
+        }  catch (Exception e) {
+            con.rollback();
+            e.getMessage();
+            e.printStackTrace();
+        } finally {
+            if (con != null)  con.close();
+        }
+        return actualizado;
+    }
+
     public boolean deleteUsuario(String usuario) throws SQLException {
         boolean deleted = false;
         Connection con = null;
@@ -268,6 +304,8 @@ public class UsuarioDAO {
         }
         return deleted;
     }
+
+
 
     public static String byteToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
