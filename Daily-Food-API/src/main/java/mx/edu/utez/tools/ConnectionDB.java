@@ -41,8 +41,7 @@ public class ConnectionDB {
         }catch(SQLException e){
             System.err.println(e.getMessage());
         }
-    }
-    */
+    }*/
     //Dirección de acceso
     public static String idAddress = "remotemysql.com";
     //Nombre de la base de datos
@@ -77,5 +76,4 @@ public class ConnectionDB {
             System.err.println(e.getMessage());
         }
     }
-
 }

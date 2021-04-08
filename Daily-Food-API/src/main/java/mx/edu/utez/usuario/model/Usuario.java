@@ -9,6 +9,7 @@ public class Usuario {
     private int token;
     private String correo;
     private String telefono;
+    private boolean status;
     private Persona idPersona;
     private Rol idRol;
 
@@ -66,5 +67,13 @@ public class Usuario {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }
