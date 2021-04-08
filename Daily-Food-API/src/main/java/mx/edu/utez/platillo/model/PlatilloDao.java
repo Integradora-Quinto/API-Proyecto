@@ -27,25 +27,20 @@ public class PlatilloDao {
             con = ConnectionDB.getConnection();
             ps = con.prepareStatement("SELECT p.idplatillo, i.idimagenplatillo FROM platillo p INNER JOIN imagenplatillo i ON p.idplatillo = i.idplatillo;");
             rs = ps.executeQuery();
-            PrecioDao precioDao = new PrecioDao();
-            ImagenPlatilloDAO imagenDao = new ImagenPlatilloDAO();
+            PlatilloDao dao = new PlatilloDao();
             while(rs.next()){
-                System.out.println(rs.getInt(1) + rs.getInt(2));
                 PlatilloCompleto platilloCompleto = new PlatilloCompleto();
-                Platillo platillo = this.getPlatilloById(rs.getInt(1));
-                platilloCompleto.setPrecio(precioDao.getPrecioByPlatillo(platillo.getIdPlatillo()));
+                platilloCompleto = dao.getPlatilloCompletoById(rs.getInt(1));
                 platilloCompleto.getPrecio().setIdPlatillo(null);
-                platilloCompleto.setImagen(imagenDao.getImagenPlatilloById(rs.getInt(2)));
                 platilloCompleto.getImagen().setIdPlatillo(null);
-                platilloCompleto.setPlatillo(platillo);
                 platillos.add(platilloCompleto);
             }
         }catch(Exception e){
             System.err.println("ERROR GET PLATILLOS " + e.getMessage());
         }finally{
-            if(con!=null) con.close();
-            if(ps!=null)ps.close();
             if(rs!=null)rs.close();
+            if(ps!=null)ps.close();
+            if(con!=null) con.close();
         }
         return platillos;
     }
@@ -67,7 +62,7 @@ public class PlatilloDao {
                 platillo.setPlatillo(dao.getPlatilloById(rs.getInt(1)));
                 platillo.setImagen(imagenDao.getImagenPlatilloById(rs.getInt(2)));
                 platillo.setPrecio(precio.getPrecioByPlatillo(rs.getInt(1)));
-                platillo.setPreparacion(preparacion.readPreparacionById(rs.getInt(1)));
+                platillo.setPreparacion(preparacion.readPreparacionByPlatillo(rs.getInt(1)));
                 platillo.setIngredientes(ingredientes.getIngredientesByPlatillo(rs.getInt(1)));
                 platillo.getImagen().setIdPlatillo(null);
                 platillo.getPrecio().setIdPlatillo(null);
@@ -76,9 +71,9 @@ public class PlatilloDao {
         }catch(Exception e){
             System.err.println("ERROR EN OBTENER PLATILLO COMPLETO");
         }finally{
-            if(con!=null) con.close();
             if(rs!=null)rs.close();
             if(ps!=null)ps.close();
+            if(con!=null) con.close();
         }
         return platillo;
     }
@@ -101,9 +96,9 @@ public class PlatilloDao {
         }catch(Exception e){
             System.err.println(e.getMessage());
         }finally{
-            if(con!=null) con.close();
             if(rs!=null)rs.close();
             if(ps!=null)ps.close();
+            if(con!=null) con.close();
         }
 
         return platillo;

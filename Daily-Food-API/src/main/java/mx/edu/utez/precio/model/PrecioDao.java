@@ -53,9 +53,9 @@ public class PrecioDao {
         }catch (Exception e){
             System.err.println("Error msg: " + e.getMessage());
         }finally {
-            con.close();
-            rs.close();
-            ps.close();
+            if(rs != null){rs.close();}
+            if(ps != null){ps.close();}
+            if(con != null){con.close();}
         }
         return precio;
     }

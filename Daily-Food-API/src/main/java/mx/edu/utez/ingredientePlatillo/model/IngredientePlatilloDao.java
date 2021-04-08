@@ -66,9 +66,9 @@ public class IngredientePlatilloDao {
         }catch(Exception e){
             e.getMessage();
         }finally {
-            if(con!=null) con.close();
             if(rs!=null)rs.close();
             if(ps!=null)ps.close();
+            if(con!=null) con.close();
         }
 
         return list;

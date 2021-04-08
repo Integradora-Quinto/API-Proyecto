@@ -81,8 +81,8 @@ public class PreparacionDao {
         return object;
     }
 
-    public List readPreparacionByPlatillo(int id) throws SQLException {
-        ArrayList<Preparacion> list = new ArrayList();
+    public Preparacion readPreparacionByPlatillo(int id) throws SQLException {
+        Preparacion preparacion = new Preparacion();
         try{
             con = ConnectionDB.getConnection();
             ps = con.prepareStatement("SELECT * FROM  preparacion WHERE idPlatillo = ?;");
@@ -90,27 +90,19 @@ public class PreparacionDao {
             rs = ps.executeQuery();
             PlatilloDao platilloDao = new PlatilloDao();
             while(rs.next()){
-                Preparacion object = new Preparacion();
-                object.setIdPreparacion(rs.getInt(1));
-                object.setDescripcion(rs.getString(2));
-                object.setIdPlatillo(platilloDao.getPlatilloById(rs.getInt(3)));
-                list.add(object);
+                preparacion.setIdPreparacion(rs.getInt(1));
+                preparacion.setDescripcion(rs.getString(2));
+                preparacion.setIdPlatillo(platilloDao.getPlatilloById(rs.getInt(3)));
             }
         }catch(Exception e){
             System.err.println("ERROR "+e.getMessage() );
         }finally {
-            if(ps != null){
-                ps.close();
-            }
-            if(rs != null){
-                rs.close();
-            }
-            if(con != null){
-                con.close();
-            }
+            if(rs != null){rs.close();}
+            if(ps != null){ps.close();}
+            if(con != null){con.close(); }
         }
 
-        return list;
+        return preparacion;
     }
 
 

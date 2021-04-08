@@ -69,7 +69,6 @@ public class UsuarioDAO {
                     usuario.setIdPersona(personaDAO.getPersonaById(rs.getInt(7)));
                     usuario.setIdRol(rolDAO.getRolById(rs.getInt(8)));
                     usuarios.add(usuario);
-
                 }
             }
             if (rs!=null) rs.close();
