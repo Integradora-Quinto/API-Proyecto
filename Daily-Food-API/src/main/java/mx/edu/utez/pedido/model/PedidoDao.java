@@ -126,12 +126,10 @@ public class PedidoDao {
             con = ConnectionDB.getConnection();
             ps = con.prepareStatement("SELECT idPedido FROM pedido WHERE status LIKE 'En curso'");
             rs = ps.executeQuery();
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
-            DireccionDao direccionDao = new DireccionDao();
-            SucursalDao sucursalDao = new SucursalDao();
+            PedidoDao pedidoDao = new PedidoDao();
             while(rs.next()){
                 Pedido ped = new Pedido();
-                ped = this.getPedidoById(rs.getInt(1));
+                ped = pedidoDao.getPedidoById(rs.getInt(1));
                 pedidosC.add(ped);
             }
         }catch (Exception e) {
@@ -151,12 +149,10 @@ public class PedidoDao {
             ps = con.prepareStatement("SELECT idPedido FROM pedido WHERE status LIKE 'En curso' AND nombreUsuario LIKE ?");
             ps.setString(1, user);
             rs = ps.executeQuery();
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
-            DireccionDao direccionDao = new DireccionDao();
-            SucursalDao sucursalDao = new SucursalDao();
+            PedidoDao pedidoDao = new PedidoDao();
             while(rs.next()){
                 Pedido ped = new Pedido();
-                ped = this.getPedidoById(rs.getInt(1));
+                ped = pedidoDao.getPedidoById(rs.getInt(1));
                 pedidosC.add(ped);
             }
         }catch (Exception e) {
@@ -175,26 +171,17 @@ public class PedidoDao {
             con = ConnectionDB.getConnection();
             ps = con.prepareStatement("SELECT * FROM pedido WHERE status LIKE 'Entregado'");
             rs = ps.executeQuery();
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
-            DireccionDao direccionDao = new DireccionDao();
-            SucursalDao sucursalDao = new SucursalDao();
+            PedidoDao pedidoDao = new PedidoDao();
             while(rs.next()){
                 Pedido ped = new Pedido();
-                ped.setId(rs.getInt(1));
-                ped.setFecha(rs.getString(2));
-                ped.setCostoTotal(rs.getDouble(3));
-                ped.setCantidadPago(rs.getDouble(4));
-                ped.setStatus(rs.getString(5));
-                ped.setNombreUsuario(usuarioDAO.getUsuarioByUser(rs.getString(6)));
-                ped.setIdDireccion(direccionDao.getDireccionById(rs.getInt(7)));
-                ped.setIdSucursal(sucursalDao.getSucursalById(rs.getInt(8)));
+                ped = pedidoDao.getPedidoById(rs.getInt(1));
                 pedidosE.add(ped);
             }
         }catch (Exception e) {
             System.err.println("ERROR => " + e.getMessage());
         }finally {
-            if (ps != null) ps.close();
             if (rs != null) rs.close();
+            if (ps != null) ps.close();
             if (con != null) con.close();
         }
         return pedidosE;
@@ -207,12 +194,10 @@ public class PedidoDao {
             ps = con.prepareStatement("SELECT idPedido FROM pedido WHERE status LIKE 'Entregado' AND nombreUsuario LIKE ?");
             ps.setString(1, user);
             rs = ps.executeQuery();
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
-            DireccionDao direccionDao = new DireccionDao();
-            SucursalDao sucursalDao = new SucursalDao();
+            PedidoDao pedidoDao = new PedidoDao();
             while(rs.next()){
                 Pedido ped = new Pedido();
-                ped = this.getPedidoById(rs.getInt(1));
+                ped = pedidoDao.getPedidoById(rs.getInt(1));
                 pedidosE.add(ped);
             }
         }catch (Exception e) {
@@ -232,12 +217,10 @@ public class PedidoDao {
             ps = con.prepareStatement("SELECT idPedido FROM pedido WHERE status LIKE 'Finalizado' AND nombreUsuario LIKE ?");
             ps.setString(1, user);
             rs = ps.executeQuery();
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
-            DireccionDao direccionDao = new DireccionDao();
-            SucursalDao sucursalDao = new SucursalDao();
+            PedidoDao pedidoDao = new PedidoDao();
             while(rs.next()){
                 Pedido ped = new Pedido();
-                ped = this.getPedidoById(rs.getInt(1));
+                ped = pedidoDao.getPedidoById(rs.getInt(1));
                 pedidosF.add(ped);
             }
         }catch (Exception e) {
@@ -355,8 +338,8 @@ public class PedidoDao {
             System.err.println("ERROR CREATE PEDIDO" + e.getMessage());
             con.rollback();
         }finally{
-            if (ps != null) ps.close();
             if (rs != null) rs.close();
+            if (ps != null) ps.close();
             if (con != null) con.close();
         }
         return pedidoInsert;
@@ -411,8 +394,8 @@ public class PedidoDao {
             System.err.println("ERROR EN ACTUALIZAR STATUS AL PEDIDO -> " + e.getMessage());
             con.rollback();
         }finally {
-            if (ps != null) ps.close();
             if (rs != null) rs.close();
+            if (ps != null) ps.close();
             if (con != null) con.close();
         }
         return changed;
@@ -435,8 +418,8 @@ public class PedidoDao {
             System.err.println("ERROR CANCELAR PEDIDO"+ e.getMessage());
             con.rollback();
         }finally{
-            if (ps != null) ps.close();
             if (rs != null) rs.close();
+            if (ps != null) ps.close();
             if (con != null) con.close();
         }
         return flag;
