@@ -67,7 +67,6 @@ public class ConnectionDB {
 
     public static void main(String[] args) {
         Connection con;
-
         try{
             con = ConnectionDB.getConnection();
             System.out.println("Connection OK :D " + con);

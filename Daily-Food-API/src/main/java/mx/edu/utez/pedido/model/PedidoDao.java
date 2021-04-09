@@ -69,10 +69,9 @@ public class PedidoDao {
                 p.setFecha(rs.getString(2));
                 p.setCostoTotal(rs.getDouble(3));
                 p.setCantidadPago(rs.getDouble(4));
+                p.setComentario(rs.getString(6));
                 ped.setIdPedido(p);
                 ped.setPersona(persona.getPersonaById(usuarioDAO.getUsuarioByUser(rs.getString(5)).getIdPersona().getIdPersona()));
-                System.out.println(ped.getPersona().getNombre());
-                ped.getIdPedido().setComentario(rs.getString(6));
                 ped.setTelefono(usuarioDAO.getUsuarioByUser(rs.getString(5)).getTelefono());
                 ped.setPedidoplatillos(ptp.getPlatillosByPedido(rs.getInt(1)));
                 pedidosP.add(ped);
@@ -100,6 +99,7 @@ public class PedidoDao {
             while(rs.next()){
                 Pedido ped = new Pedido();
                 ped.setId(rs.getInt(1));
+                System.out.println(ped.getId());
                 ped.setFecha(rs.getString(2));
                 ped.setCostoTotal(rs.getDouble(3));
                 ped.setCantidadPago(rs.getDouble(4));
@@ -113,8 +113,8 @@ public class PedidoDao {
         }catch (Exception e) {
             System.err.println("ERROR => " + e.getMessage());
         }finally {
-            if (ps != null) ps.close();
             if (rs != null) rs.close();
+            if (ps != null) ps.close();
             if (con != null) con.close();
         }
         return pedidosP;

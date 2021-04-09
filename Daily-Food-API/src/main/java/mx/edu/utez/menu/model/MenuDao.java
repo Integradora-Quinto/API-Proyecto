@@ -2,6 +2,7 @@ package mx.edu.utez.menu.model;
 
 import mx.edu.utez.platillo.model.PlatilloCompleto;
 import mx.edu.utez.platillo.model.PlatilloDao;
+import mx.edu.utez.platilloenmenu.model.PlatilloEnMenuDao;
 import mx.edu.utez.sucursal.model.SucursalDao;
 import mx.edu.utez.tipomenu.model.TipoMenuDao;
 import mx.edu.utez.tools.ConnectionDB;
@@ -46,6 +47,42 @@ public class MenuDao {
         return menu;
     }
 
+    public Menu getDesayuno(){
+        Menu menu = new Menu();
+        try{
+            Connection con  = ConnectionDB.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT idMenu FROM menu  WHERE idTipoMenu = 1;");
+            ResultSet rs = ps.executeQuery();
+            PlatilloEnMenuDao platilloEnMenuDao = new PlatilloEnMenuDao();
+            MenuDao menuDao = new MenuDao();
+            while(rs.next()){
+                menu = menuDao.getMenuById(rs.getInt(1));
+                menu.setPlatillos(platilloEnMenuDao.getPlatillosEnMenuByMenu(menu.getIdMenu()));
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        }catch(Exception err){
+            System.out.println("ERROR EN getDesayuno");
+        }
+        return menu;
+    }
+
+    public List getMenuCompleto (){
+        List<Menu> menuCompleto = new ArrayList<Menu>();
+        MenuDao menuDao = new MenuDao();
+        menuCompleto.add(menuDao.getDesayuno());
+        System.out.println("desayuno: " + menuCompleto.get(0).getIdMenu());
+        menuCompleto.add(menuDao.getMenus());
+        System.out.println("menus: " + menuCompleto.get(1).getIdMenu());
+        if(menuCompleto.size() > 0){
+            System.out.println("SUCCESS");
+        }else{
+            System.out.println("ERROR getMenuCompleto");
+        }
+        return menuCompleto;
+    }
+
     public Menu getMenuById(int idMenu){
         Menu obj = new Menu();
         try{
@@ -62,6 +99,7 @@ public class MenuDao {
                 obj.setIdSucursal(sucursal.getSucursalById(rs.getInt(4)));
             }
             rs.close();
+            ps.close();
             con.close();
         }catch(Exception e){
             System.err.println("Error de conexión");

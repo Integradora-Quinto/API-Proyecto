@@ -15,19 +15,14 @@ public class PlatilloEnMenuDao {
         ArrayList<PlatilloEnMenu> platillosEnMenu = new ArrayList();
         try{
             Connection con = ConnectionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT  * FROM platilloEnMenu WHERE idMenuPlatillo = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT  * FROM platilloenmenu WHERE idMenuPlatillo = ?");
             ps.setInt(1, idMenu);
             ResultSet rs = ps.executeQuery();
-            MenuDao menu = new MenuDao();
-            PlatilloDao daoPlatillo = new PlatilloDao();
+            PlatilloEnMenuDao thisDao = new PlatilloEnMenuDao();
             while(rs.next()) {
                 PlatilloEnMenu platilloEnMenu = new PlatilloEnMenu();
-                platilloEnMenu.setIdPlatilloMenu(rs.getInt(1));
-                platilloEnMenu.setCantidadEstimada(rs.getInt(2));
-                platilloEnMenu.setStatus(rs.getBoolean(3));
-                platilloEnMenu.setIdMenu(menu.getMenuById(rs.getInt(4)));
-                platilloEnMenu.setIdPlatillo2(daoPlatillo.getPlatilloCompletoById(rs.getInt(5)));
-                platilloEnMenu.setIdPlatillo(daoPlatillo.getPlatilloById(rs.getInt(5)));
+                platilloEnMenu = thisDao.getPlatilloEnMenuById(rs.getInt(1));
+                platilloEnMenu.setIdMenu(null);
                 platillosEnMenu.add(platilloEnMenu);
             }
             rs.close();
@@ -53,7 +48,7 @@ public class PlatilloEnMenuDao {
                 platilloMenu.setCantidadEstimada(rs.getInt(2));
                 platilloMenu.setStatus(rs.getBoolean(3));
                 platilloMenu.setIdMenu(menu.getMenuById(rs.getInt(4)));
-                platilloMenu.setIdPlatillo(platillo.getPlatilloById(rs.getInt(5)));
+                platilloMenu.setIdPlatillo2(platillo.getPlatilloCompletoById(rs.getInt(5)));
             }
             rs.close();
             ps.close();
@@ -62,6 +57,30 @@ public class PlatilloEnMenuDao {
             System.err.println("ERROR " +e.getMessage());
         }
         return platilloMenu;
+    }
+
+    public List getPlatillosEnMenuByMenu(int idMenu){
+        List<PlatilloEnMenu> platillos = new ArrayList<>();
+        try{
+            Connection con = ConnectionDB.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM platilloenmenu WHERE idMenu = ? AND status = 1");
+            ps.setInt(1, idMenu);
+            ResultSet rs = ps.executeQuery();
+            PlatilloEnMenuDao platilloEnMenuDao = new PlatilloEnMenuDao();
+            while(rs.next()){
+                PlatilloEnMenu platilloEnMenu = new PlatilloEnMenu();
+                platilloEnMenu = platilloEnMenuDao.getPlatilloEnMenuById(rs.getInt(1));
+                platilloEnMenu.getIdPlatillo2().setIngredientes(null);
+                platilloEnMenu.setIdMenu(null);
+                platillos.add(platilloEnMenu);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        }catch(Exception e){
+            System.err.println("ERROR PlatilloEnMenuDao" +e.getMessage());
+        }
+        return platillos;
     }
 
     public PlatilloEnMenu createPlatilloEnMenu(PlatilloEnMenu platilloInsert) throws SQLException {
