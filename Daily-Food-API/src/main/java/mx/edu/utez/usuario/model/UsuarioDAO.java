@@ -132,6 +132,7 @@ public class UsuarioDAO {
                     usuarioLogin.setNombreUsuario(rs.getString(1));
                     usuarioLogin.setContrasenia("PRIVATE");
                     usuarioLogin.setToken(rs.getInt(3));
+                    usuarioLogin.setStatus(rs.getBoolean(6));
                     usuarioLogin.setIdPersona(personaDAO.getPersonaById(rs.getInt(7)));
                     usuarioLogin.setIdRol(rolDAO.getRolById(rs.getInt(8)));
                 }
