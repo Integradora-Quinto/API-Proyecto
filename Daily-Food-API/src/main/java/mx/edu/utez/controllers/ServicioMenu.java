@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Path("/daily")
 public class ServicioMenu {
@@ -56,7 +57,7 @@ public class ServicioMenu {
     @Path("/menus")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public MyResponse createMenu(Menu menuN) throws SQLException {
+    public MyResponse createMenu(Map menuN) throws SQLException {
         MyResponse response = new MyResponse();
         Menu menuR = (new MenuDao().createMenu(menuN));
         response.setData(menuR);
