@@ -1,5 +1,6 @@
 package mx.edu.utez.controllers;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import mx.edu.utez.platillo.model.Platillo;
 import mx.edu.utez.platillo.model.PlatilloCompleto;
 import mx.edu.utez.platillo.model.PlatilloDao;
@@ -8,6 +9,7 @@ import mx.edu.utez.response.MyResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/daily")
@@ -51,6 +53,27 @@ public class ServicePlatillo {
             response.setStatus("error");
             response.setMessage("ERROR READ PLATILLOS FOR SET PRECIOS");
             response.setData(null);
+        }
+        return response;
+    }
+
+    @GET
+    @Path("/platillos/forMenus/{tipo}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public MyResponse getPlatillosByTipo(@PathParam("tipo") int idTipo) throws SQLException {
+        MyResponse response = new MyResponse();
+        List<Platillo> platillos = new ArrayList<>();
+        platillos = (new PlatilloDao().getPlatillosByTipo(idTipo));
+        response.setData(platillos);
+        if(platillos.size() > 0){
+            response.setCode(200);
+            response.setStatus("SUCCESS");
+            response.setMessage("Recuperación exitosa");
+        }else{
+            response.setCode(400);
+            response.setStatus("ERROR");
+            response.setMessage("Recuperación fallida");
         }
         return response;
     }
