@@ -7,6 +7,9 @@ import mx.edu.utez.response.MyResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Path("/daily")
 public class ServicioMenu {
@@ -16,9 +19,10 @@ public class ServicioMenu {
     @Produces(MediaType.APPLICATION_JSON)
     public MyResponse getMenus(){
         MyResponse response = new MyResponse();
-        Menu menu = (new MenuDao().getMenus());
+        List<Menu> menu = new ArrayList<Menu>();
+        menu = (new MenuDao().getMenuCompleto());
         response.setData(menu);
-        if(menu.getIdMenu() != 0){
+        if(menu.size() > 0){
             response.setStatus("success");
             response.setCode(200);
             response.setMessage("Consulta exitosa");
@@ -53,7 +57,7 @@ public class ServicioMenu {
     @Path("/menus")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public MyResponse createMenu(Menu menuN) throws SQLException {
+    public MyResponse createMenu(Map menuN) throws SQLException {
         MyResponse response = new MyResponse();
         Menu menuR = (new MenuDao().createMenu(menuN));
         response.setData(menuR);

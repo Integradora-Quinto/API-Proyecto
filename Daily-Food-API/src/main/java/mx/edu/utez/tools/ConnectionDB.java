@@ -18,7 +18,7 @@ public class ConnectionDB {
     public static String port = "3306";
     //Zona horaria "no es necesario en todos los equipos"
     public static String hourZone = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC" ;
-
+/*
     public static Connection getConnection() throws SQLException {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -42,6 +42,7 @@ public class ConnectionDB {
             System.err.println(e.getMessage());
         }
     }*/
+
     //Dirección de acceso
     public static String idAddress = "remotemysql.com";
     //Nombre de la base de datos
@@ -67,7 +68,6 @@ public class ConnectionDB {
 
     public static void main(String[] args) {
         Connection con;
-
         try{
             con = ConnectionDB.getConnection();
             System.out.println("Connection OK :D " + con);

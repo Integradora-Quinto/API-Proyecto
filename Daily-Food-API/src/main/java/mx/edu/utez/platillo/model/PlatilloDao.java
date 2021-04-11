@@ -20,7 +20,6 @@ public class PlatilloDao {
     ResultSet rs;
     PreparedStatement ps;
 
-
     public List getPlatillos() throws SQLException {
         ArrayList<PlatilloCompleto> platillos = new ArrayList();
         try{
@@ -28,8 +27,9 @@ public class PlatilloDao {
             ps = con.prepareStatement("SELECT p.idplatillo, i.idimagenplatillo FROM platillo p INNER JOIN imagenplatillo i ON p.idplatillo = i.idplatillo;");
             rs = ps.executeQuery();
             PlatilloDao dao = new PlatilloDao();
+            PlatilloCompleto platilloCompleto;
             while(rs.next()){
-                PlatilloCompleto platilloCompleto = new PlatilloCompleto();
+                platilloCompleto = new PlatilloCompleto();
                 platilloCompleto = dao.getPlatilloCompletoById(rs.getInt(1));
                 platilloCompleto.getPrecio().setIdPlatillo(null);
                 platilloCompleto.getImagen().setIdPlatillo(null);
@@ -130,6 +130,29 @@ public class PlatilloDao {
         return list;
     }
 
+    public  List getPlatillosByTipo(int idTipoPlatillo) throws SQLException{
+        List<Platillo> platillos = new ArrayList<Platillo>();
+        try{
+            con = ConnectionDB.getConnection();
+            ps = con.prepareStatement("SELECT idPlatillo, nombrePlatillo FROM platillo WHERE idTipoPlatillo = ?");
+            ps.setInt(1, idTipoPlatillo);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                Platillo platillo = new Platillo();
+                platillo.setIdPlatillo(rs.getInt(1));
+                platillo.setNombrePlatillo(rs.getString(2));
+                platillos.add(platillo);
+            }
+        }catch(Exception err){
+            System.out.println("ERROR getPlatillosByTipo " + err.getMessage());
+        }finally {
+            if(rs!=null)rs.close();
+            if(ps!=null)ps.close();
+            if(con!=null) con.close();
+        }
+        return platillos;
+    }
+
     public boolean createPlatillo(PlatilloCompleto platillo) throws SQLException{
         boolean flag = false;
         boolean myFlag = false;
@@ -187,7 +210,6 @@ public class PlatilloDao {
         }
         return flag;
     }
-
 
     public boolean updatePlatillo(Platillo platillo) throws SQLException{
         boolean flag = false;
