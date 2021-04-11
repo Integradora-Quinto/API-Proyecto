@@ -216,6 +216,27 @@ public class ServiceUsuario {
         return resp;
     }
 
+    @PUT
+    @Path("/usuarios/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public MyResponse changeStatus(Usuario usuario) throws SQLException {
+        MyResponse resp = new MyResponse();
+
+        Usuario actualizado = (new UsuarioDAO().updateStatus(usuario));
+        if (!actualizado.getNombreUsuario().isEmpty()) {
+            resp.setCode(200);
+            resp.setMessage("El status del usuario se ha actualizado");
+            resp.setStatus("success");
+            resp.setData(actualizado);
+        } else {
+            resp.setCode(400);
+            resp.setMessage("Error al cambiar el status del usuario");
+            resp.setStatus("error");
+        }
+        return resp;
+    }
+
     @DELETE
     @Path("/usuarios/{user}")
     @Produces(MediaType.APPLICATION_JSON)
