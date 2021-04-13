@@ -174,14 +174,19 @@ public class PlatilloDao {
             flag = (ps.executeUpdate() == 1);
             System.out.println(flag);
             if(flag){
+                con.commit();
                 try(ResultSet generateKeys = ps.getGeneratedKeys()){
                     if(generateKeys.next()){
                         int idRecovery = generateKeys.getInt(1);
                         platilloInsert = platillo.getPlatillo();
                         System.out.println(idRecovery);
                         platilloInsert.setIdPlatillo(idRecovery);
-                        ImagenPlatillo imagen = imgDao.createImagenPlatillo(platillo.getImagen().getImgFile(), platilloInsert.getIdPlatillo());
+                        ImagenPlatillo imagen = new ImagenPlatillo();
+                        imagen.setImg(platillo.getImagen().getImg());
+                        System.out.println(imagen.getImg()+ "--> img");
+                        imagen.setIdPlatillo(platilloInsert);
                         platillo.getPreparacion().setIdPlatillo(platilloInsert);
+                        boolean insertImg = imgDao.createImageString(imagen);
                         Preparacion prep = preparacion.createPreparacion(platillo.getPreparacion());
                         for (int i = 0; i < platillo.getIngredientes().size(); i++){
                             System.out.println("Entre aquí");
@@ -189,11 +194,16 @@ public class PlatilloDao {
                             System.out.println(platilloInsert.getIdPlatillo());
                             myFlag = ingredientes.createIngredientePlatillo(platillo.getIngredientes().get(i));
                         }
+                        if(insertImg && prep.getIdPreparacion() > 0){
+                            flag = true;
+                        }else{
+                            flag = false;
+                        }
                     }else{
                         throw new SQLException("FAIL PLATILLO NOT CREATED");
                     }
                 }
-                con.commit();
+                ps.close();
             }
             if(platilloInsert.getIdPlatillo() > 0 && myFlag){
                 flag = true;
@@ -201,7 +211,7 @@ public class PlatilloDao {
                 flag = false;
             }
         }catch(Exception e){
-            System.err.println("ERROR CREATE" + e.getMessage());
+            System.err.println("ERROR CREATE " + e.getMessage());
             con.rollback();
         }finally{
             if(con!=null) con.close();

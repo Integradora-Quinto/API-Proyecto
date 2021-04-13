@@ -96,6 +96,37 @@ public class ImagenPlatilloDAO {
         return nueva;
     }
 
+    public boolean createImageString(ImagenPlatillo image) throws SQLException{
+        boolean flag = false;
+        Connection con = null;
+        try{
+            con = ConnectionDB.getConnection();
+            con.setAutoCommit(false);
+            PreparedStatement ps = con.prepareStatement("INSERT INTO imagenplatillo(idplatillo, img) VALUES (?,?);",  Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, image.getIdPlatillo().getIdPlatillo());
+            ps.setString(2, image.getImg());
+            flag = (ps.executeUpdate() == 1);
+            if(flag){
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int id = generatedKeys.getInt(1);
+                        if(id > 0){
+                            con.commit();
+                        }else{
+                            flag = false;
+                        }
+                    }
+                }
+            }
+            ps.close();
+        }catch(Exception e){
+            System.err.println("ERROR createImageString " + e.getMessage());
+        }finally {
+            con.close();
+        }
+        return flag;
+    }
+
     public ImagenPlatillo updateImagenPlatillo(File imagen, ImagenPlatillo imagenPlatillo) throws SQLException {
         ImagenPlatillo actualizada = new ImagenPlatillo();
         Connection con = null;
