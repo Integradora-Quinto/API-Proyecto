@@ -53,7 +53,7 @@ public class UsuarioDAO {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         try {
             Connection con = ConnectionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM usuario WHERE idRol = 2 OR idRol = 3");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM usuario WHERE idrol = 2 OR idrol = 3 AND status = 1;");
             ResultSet rs = ps.executeQuery();
             PersonaDAO personaDAO = new PersonaDAO();
             RolDAO rolDAO = new RolDAO();
@@ -258,7 +258,7 @@ public class UsuarioDAO {
             con.setAutoCommit(false);
             PreparedStatement ps = con.prepareStatement("UPDATE `usuario` SET `status` = ? WHERE `nombreUsuario` LIKE ?");
 
-            ps.setBoolean(1, usuario.isStatus());
+            ps.setBoolean(1, !usuario.isStatus());
             ps.setString(2,usuario.getNombreUsuario());
 
             boolean updated = ps.executeUpdate() == 1;
