@@ -201,4 +201,28 @@ public class PlatilloEnMenuDao {
         return deleted;
     }
 
+    public boolean changeStatusPlatilloEnMenu(PlatilloEnMenu platilloEnMenu) throws SQLException{
+        boolean changed = false;
+        Connection con = null;
+        try{
+            con = ConnectionDB.getConnection();
+            con.setAutoCommit(false);
+            PreparedStatement ps = con.prepareStatement("UPDATE platilloenmenu SET status = ? WHERE idMenuPlatillo = ?;");
+            ps.setBoolean(1, platilloEnMenu.isStatus());
+            System.out.println(platilloEnMenu.getIdPlatilloMenu());
+            System.out.println(platilloEnMenu.isStatus());
+            ps.setInt(2, platilloEnMenu.getIdPlatilloMenu());
+            changed = ps.executeUpdate() == 1;
+            System.out.println(changed);
+            if(changed){
+                con.commit();
+            }
+            ps.close();
+        }catch (Exception e){
+            System.err.println("ERROR changedStatusPlatilloEnMenu " + e.getMessage());
+            con.rollback();
+        }
+        return changed;
+    }
+
 }

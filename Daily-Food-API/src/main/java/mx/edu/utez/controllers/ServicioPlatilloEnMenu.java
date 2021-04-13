@@ -91,6 +91,27 @@ public class ServicioPlatilloEnMenu {
         return response;
     }
 
+    @PUT
+    @Path("/platillos.en.menu/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public MyResponse changeStatusPlatilloEnMenu(PlatilloEnMenu platilloEnMenu) throws SQLException{
+        MyResponse response = new MyResponse();
+        boolean changed = (new PlatilloEnMenuDao().changeStatusPlatilloEnMenu(platilloEnMenu));
+        response.setData(changed);
+        if(changed){
+            response.setCode(200);
+            response.setStatus("SUCCESS");
+            response.setMessage("Se realizó el cambio correctamente");
+        }else{
+            response.setCode(400);
+            response.setStatus("ERROR");
+            response.setMessage("Hubo un error en el cambio de status");
+        }
+        return response;
+    }
+
+
     @DELETE
     @Path("/platillos.en.menu/{idPlatilloMenu}")
     @Produces(MediaType.APPLICATION_JSON)
