@@ -1,6 +1,8 @@
 package mx.edu.utez.menu.model;
 
 import mx.edu.utez.imagenplatillo.model.ImagenPlatillo;
+import mx.edu.utez.menudia.model.MenuDia;
+import mx.edu.utez.menudia.model.MenuDiaDao;
 import mx.edu.utez.platillo.model.Platillo;
 import mx.edu.utez.platillo.model.PlatilloCompleto;
 import mx.edu.utez.platillo.model.PlatilloDao;
@@ -178,34 +180,64 @@ public class MenuDao {
         return obj;
     }
 
-    public Menu createMenu(Map menuNuevo) throws SQLException {
+    public Menu createMenu(MenuCompleto menuNuevo) throws SQLException {
         boolean insert = false;
         Menu menuReturn = new Menu();
-        MenuDao menuDao = new MenuDao();
+        MenuDiaDao menuDiaDao = new MenuDiaDao();
         Connection con = null;
         try{
             con = ConnectionDB.getConnection();
             con.setAutoCommit(false);
-            PreparedStatement ps = con.prepareStatement("INSERT INTO menu (`nombreMenu`, `idTipoMenu`, `idSucursal`) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, ((Menu)menuNuevo.get("menu")).getNombreMenu());
-            ps.setInt(2, (((Menu)menuNuevo.get("menu")).getIdTipoMenu().getIdTipoMenu()));
-            ps.setInt(3, 1);
+            PreparedStatement ps = con.prepareStatement("INSERT INTO menu (`nombreMenu`, `idTipoMenu`, `idSucursal`) VALUES(?,?,1)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, menuNuevo.getNombreMenu());
+            ps.setInt(2, menuNuevo.getIdTipoMenu().getIdTipoMenu());
+            System.out.println("nombre menu: "+ menuNuevo.getNombreMenu());
+            System.out.println("tipoMenu: " + menuNuevo.getIdTipoMenu().getIdTipoMenu() );
             insert = (ps.executeUpdate() == 1);
             if(insert){
+                con.commit();
                 try(ResultSet generatedKeys = ps.getGeneratedKeys()){
                     if(generatedKeys.next()){
                         int idRecovery = generatedKeys.getInt(1);
-                        menuReturn = menuDao.getMenuById(idRecovery);
-
+                        System.out.println("ID RECOVERY: " + idRecovery);
+                        menuReturn.setIdMenu(idRecovery);
+                        MenuDia menuDia = new MenuDia();
+                        menuDia.setFecha(menuNuevo.getMenuDia().getFecha());
+                        System.out.println("Fecha: " + menuDia.getFecha());
+                        menuDia.setStatus(menuNuevo.getMenuDia().isStatus());
+                        System.out.println("Status: " + menuDia.isStatus());
+                        Menu m = new Menu();
+                        m.setIdMenu(idRecovery);
+                        menuDia.setIdMenu(m);
+                        System.out.println("IdMenu en menuDia " + menuDia.getIdMenu().getIdMenu());
+                        MenuDia md = menuDiaDao.createMenuDia(menuDia);
+                        System.out.println("MD: " + md.getFecha());
+                        if(md.getIdMenu().getIdMenu() > 0){
+                            System.out.println("MD2: " + md.getFecha());
+                            PlatilloEnMenuDao platilloEnMenuDao = new PlatilloEnMenuDao();
+                            System.out.println("Size platillos " + menuNuevo.getPlatilloEnMenu().size());
+                            List<PlatilloEnMenu> platillos = new ArrayList<>();
+                            platillos = menuNuevo.getPlatilloEnMenu();
+                            System.out.println("platillos: " + platillos);
+                            int size = platillos.size();
+                            System.out.println("Size list: " + size);
+                            for(int i = 0; i < size; i++){
+                                PlatilloEnMenu platilloEnMenu = new PlatilloEnMenu();
+                                platilloEnMenu = platillos.get(i);
+                                platilloEnMenu.setIdMenu(menuReturn);
+                                platilloEnMenuDao.createPlatilloEnMenu(platilloEnMenu);
+                            }
+                            menuReturn.setIdMenu(idRecovery);
+                        }
                     }else{
                         throw new SQLException("FAIL NOT CREATED");
                     }
                 }
             }
-            con.commit();
+            ps.close();
         }catch(Exception e){
             con.rollback();
-            System.err.println("Error "+e.getMessage());
+            System.err.println("Error createMenu "+e.getMessage());
         }finally {
             con.close();
         }

@@ -9,6 +9,7 @@ public class PedidoTienePlatillo {
     private PlatilloEnMenu idMenuPlatillo;
     private int cantidad;
     private String comentario;
+    private Platillo platilloObject;
     private String platillo;
 
     public String getPlatillo() {
@@ -17,6 +18,14 @@ public class PedidoTienePlatillo {
 
     public void setPlatillo(String platillo) {
         this.platillo = platillo;
+    }
+
+    public Platillo getPlatilloObject() {
+        return platilloObject;
+    }
+
+    public void setPlatilloObject(Platillo platillo) {
+        this.platilloObject = platillo;
     }
 
     public Pedido getIdPedido() {

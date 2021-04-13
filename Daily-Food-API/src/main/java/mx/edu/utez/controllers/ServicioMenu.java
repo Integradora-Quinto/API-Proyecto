@@ -1,6 +1,7 @@
 package mx.edu.utez.controllers;
 
 import mx.edu.utez.menu.model.Menu;
+import mx.edu.utez.menu.model.MenuCompleto;
 import mx.edu.utez.menu.model.MenuDao;
 import mx.edu.utez.response.MyResponse;
 
@@ -57,7 +58,7 @@ public class ServicioMenu {
     @Path("/menus")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public MyResponse createMenu(Map menuN) throws SQLException {
+    public MyResponse createMenu(MenuCompleto menuN) throws SQLException {
         MyResponse response = new MyResponse();
         Menu menuR = (new MenuDao().createMenu(menuN));
         response.setData(menuR);

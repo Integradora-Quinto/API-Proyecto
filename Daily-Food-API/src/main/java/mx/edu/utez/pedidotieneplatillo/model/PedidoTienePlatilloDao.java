@@ -53,7 +53,9 @@ public class PedidoTienePlatilloDao {
         ArrayList<PedidoTienePlatillo> list = new ArrayList();
         try{
             con = ConnectionDB.getConnection();
-            ps = con.prepareStatement("SELECT * FROM pedidotieneplatillo WHERE idPedido = ?");
+            ps = con.prepareStatement("select distinct pm.* from pedidotieneplatillo ptp\n" +
+                    "inner join platilloenmenu pm ON ptp.idmenuplatillo = pm.idmenuplatillo\n" +
+                    "INNER JOIN platillo p ON p.idplatillo = pm.idplatillo where idPedido =?;");
             ps.setInt(1,id);
             rs = ps.executeQuery();
             PedidoDao pedidoDao = new PedidoDao();
@@ -62,13 +64,13 @@ public class PedidoTienePlatilloDao {
             while(rs.next()){
                 PedidoTienePlatillo object = new PedidoTienePlatillo();
                 //object.setIdMenuPlatillo(platilloEnMenuDao.getPlatilloEnMenuById(rs.getInt(2)));
-                object.setPlatillo(platillo.getPlatilloById(platilloEnMenuDao.getPlatilloEnMenuById(rs.getInt(2)).getIdPlatillo().getIdPlatillo()).getNombrePlatillo());
+                object.setPlatilloObject(platillo.getPlatilloById(rs.getInt(5)));
                 object.setCantidad(rs.getInt(3));
                 object.setComentario(rs.getString(4));
                 list.add(object);
             }
         }catch(Exception e){
-            System.err.println("ERROR PEDIDO TIENE PROMOCION  "+e.getMessage());
+            System.err.println("ERROR PEDIDO TIENEPLATILLOS "+e.getMessage());
         }finally{
             if(rs != null){rs.close();}
             if(ps != null){ps.close();}
