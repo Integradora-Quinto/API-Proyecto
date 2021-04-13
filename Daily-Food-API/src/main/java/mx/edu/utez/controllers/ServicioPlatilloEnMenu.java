@@ -18,7 +18,7 @@ public class ServicioPlatilloEnMenu {
     @Produces(MediaType.APPLICATION_JSON)
     public MyResponse getPlatillosEnMenu(@PathParam("idMenu") int idMenu){
         MyResponse response = new MyResponse();
-        List<PlatilloCompleto> platillosEnMenu = (new PlatilloEnMenuDao().getPlatillosEnMenu(idMenu));
+        List<PlatilloCompleto> platillosEnMenu = (new PlatilloEnMenuDao().getPlatillosEnMenuByMenuForAdmin(idMenu));
         response.setData(platillosEnMenu);
         if(platillosEnMenu.size() > 0){
             response.setStatus("success");

@@ -63,7 +63,7 @@ public class PlatilloEnMenuDao {
         List<PlatilloEnMenu> platillos = new ArrayList<>();
         try{
             Connection con = ConnectionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM platilloenmenu WHERE idMenu = ? AND status = 1");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM platilloenmenu WHERE idMenu = ? ANS status=1");
             ps.setInt(1, idMenu);
             ResultSet rs = ps.executeQuery();
             PlatilloEnMenuDao platilloEnMenuDao = new PlatilloEnMenuDao();
@@ -72,6 +72,37 @@ public class PlatilloEnMenuDao {
                 platilloEnMenu = platilloEnMenuDao.getPlatilloEnMenuById(rs.getInt(1));
                 platilloEnMenu.getIdPlatillo2().setIngredientes(null);
                 platilloEnMenu.setIdMenu(null);
+                platillos.add(platilloEnMenu);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        }catch(Exception e){
+            System.err.println("ERROR PlatilloEnMenuDao" +e.getMessage());
+        }
+        return platillos;
+    }
+
+    public List getPlatillosEnMenuByMenuForAdmin(int idMenu){
+        List<PlatilloEnMenu> platillos = new ArrayList<>();
+        try{
+            Connection con = ConnectionDB.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM platilloenmenu WHERE idMenu = ?");
+            ps.setInt(1, idMenu);
+            ResultSet rs = ps.executeQuery();
+            PlatilloEnMenuDao platilloEnMenuDao = new PlatilloEnMenuDao();
+            PlatilloDao platillo = new PlatilloDao();
+            while(rs.next()){
+                PlatilloEnMenu platilloEnMenu = new PlatilloEnMenu();
+                platilloEnMenu.setIdPlatilloMenu(rs.getInt(1));
+                platilloEnMenu.setStatus(rs.getBoolean(3));
+                platilloEnMenu.setIdPlatillo(platillo.getPlatilloById(rs.getInt(5)));
+                platilloEnMenu.getIdPlatillo().setDescripcion(null);
+                platilloEnMenu.getIdPlatillo().setTiempoPreparacion(0);
+                platilloEnMenu.getIdPlatillo().setIdTipoPlatillo(null);
+                platilloEnMenu.setIdMenu(null);
+                platilloEnMenu.setCantidadEstimada(0);
+                platilloEnMenu.setIdPlatillo2(null);
                 platillos.add(platilloEnMenu);
             }
             rs.close();
