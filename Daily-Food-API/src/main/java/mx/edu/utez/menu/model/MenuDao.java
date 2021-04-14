@@ -56,38 +56,38 @@ public class MenuDao {
         return menu;
     }
 
-    public Menu getMenuDeDia(){
-        Menu menu = new Menu();
-        List<PlatilloCompleto> platillos = new ArrayList();
+    public List getMenusProximos(){
+        List<MenuDia> menuDia = new ArrayList();
         try{
             Connection con = ConnectionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT pem.idplatillo, pem.idMenuPlatillo, m.idMenu, md.idMenuDia FROM platilloenmenu pem \n" +
-                    "INNER JOIN menu m ON pem.idMenu = m.idMenu\n" +
-                    "INNER JOIN menudia md on m.idMenu = md.idMenu\n" +
-                    "WHERE md.fecha = curdate()\n" +
-                    "AND pem.status = 1\n" +
-                    "AND md.status = 1;");
+            PreparedStatement ps = con.prepareStatement("SELECT md.idMenuDia, md.fecha, m.idMenu, m.nombreMenu, tm.nombreTMenu FROM menudia md \n" +
+                    "INNER JOIN menu m ON md.idMenu = m.idMenu\n" +
+                    "INNER JOIN tipomenu tm ON m.idTipoMenu = tm.idTipoMenu\n" +
+                    "WHERE md.status = 1\n" +
+                    "AND md.fecha >= curdate();");
             ResultSet rs = ps.executeQuery();
-            PlatilloDao platDao = new PlatilloDao();
-            MenuDao menuDao = new MenuDao();
             while(rs.next()){
-                System.out.println("IDMENU DIA :> " + rs.getInt(4));
+                System.out.println("IDMENU DIA :> " + rs.getInt(1));
                 System.out.println("ID MENU :> " + rs.getInt(3));
-                menu = menuDao.getMenuById(rs.getInt(3));
-                PlatilloCompleto platillo = platDao.getPlatilloCompletoById(rs.getInt(1));
-                platillo.setIdMenuPlatillo(rs.getInt(2));
-                platillo.setIngredientes(null);
-                platillo.setPreparacion(null);
-                platillos.add(platillo);
+                MenuDia md = new MenuDia();
+                md.setIdMenuDia(rs.getInt(1));
+                md.setFecha(rs.getDate(2));
+                Menu menu = new Menu();
+                menu.setIdMenu(rs.getInt(3));
+                menu.setNombreMenu(rs.getString(4));
+                TipoMenu tm = new TipoMenu();
+                tm.setNombreTipoMenu(rs.getString(5));
+                menu.setIdTipoMenu(tm);
+                md.setIdMenu(menu);
+                menuDia.add(md);
             }
-            menu.setPlatillos(platillos);
             rs.close();
             ps.close();
             con.close();
         }catch(Exception e){
-            System.err.println("LIST "+e.getMessage());
+            System.err.println("LIST getPedidosProximos "+e.getMessage());
         }
-        return menu;
+        return menuDia;
     }
 
     public Menu getMenuDesayuno(){

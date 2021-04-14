@@ -3,6 +3,8 @@ package mx.edu.utez.controllers;
 import mx.edu.utez.menu.model.Menu;
 import mx.edu.utez.menu.model.MenuCompleto;
 import mx.edu.utez.menu.model.MenuDao;
+import mx.edu.utez.menudia.model.MenuDia;
+import mx.edu.utez.menudia.model.MenuDiaDao;
 import mx.edu.utez.response.MyResponse;
 
 import javax.ws.rs.*;
@@ -14,6 +16,25 @@ import java.util.Map;
 
 @Path("/daily")
 public class ServicioMenu {
+
+    @GET
+    @Path("/menus/dia")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MyResponse getMenuDia(){
+        MyResponse response = new MyResponse();
+        Menu menuDia = (new MenuDao().getMenuDelDia());
+        response.setData(menuDia);
+        if(menuDia.getIdMenu() > 0){
+            response.setCode(200);
+            response.setStatus("SUCCESS");
+            response.setMessage("Recuperación de menú del día exitosa");
+        }else{
+            response.setCode(400);
+            response.setStatus("ERROR");
+            response.setMessage("Error en la recuperación del día");
+        }
+        return response;
+    }
 
     @GET
     @Path("/menus")
@@ -31,6 +52,25 @@ public class ServicioMenu {
             response.setCode(400);
             response.setStatus("error");
             response.setMessage("Sin registros o falla");
+        }
+        return response;
+    }
+
+    @GET
+    @Path("/menus/proximos")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MyResponse getMenusProgramados(){
+        MyResponse response = new MyResponse();
+        List<MenuDia> menusProximos = (new MenuDao().getMenusProximos());
+        response.setData(menusProximos);
+        if(menusProximos.size() > 0){
+            response.setCode(200);
+            response.setStatus("SUCCESS");
+            response.setMessage("Recuperación de menus próximos exitosa");
+        }else{
+            response.setCode(400);
+            response.setStatus("ERROR");
+            response.setMessage("Error en recuperación de menus próximos");
         }
         return response;
     }
