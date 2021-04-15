@@ -6,19 +6,19 @@ import java.sql.SQLException;
 
 public class ConnectionDB {
 
-    /*//Dirección de acceso
+    //Dirección de acceso
     public static String idAddress = "localhost";
     //Nombre de la base de datos
     public static String database = "mydb";
     //Nombre de usuario para realizar la conexión
     public static String user = "root";
     //Contraseña
-    public static String password = "root";
+    public static String password = "123456";
     //Puerto /**Depende de la configuración de la máquina*
     public static String port = "3306";
     //Zona horaria "no es necesario en todos los equipos"
     public static String hourZone = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC" ;
-/*
+
     public static Connection getConnection() throws SQLException {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -41,9 +41,9 @@ public class ConnectionDB {
         }catch(SQLException e){
             System.err.println(e.getMessage());
         }
-    }*/
+    }
 
-    //Dirección de acceso
+  /*  // Dirección de acceso
     public static String idAddress = "remotemysql.com";
     //Nombre de la base de datos
     public static String database = "rO0k53fz9k";
@@ -75,5 +75,5 @@ public class ConnectionDB {
         }catch(SQLException e){
             System.err.println(e.getMessage());
         }
-    }
+    }*/
 }

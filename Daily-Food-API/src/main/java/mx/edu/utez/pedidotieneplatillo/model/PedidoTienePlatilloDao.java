@@ -53,9 +53,9 @@ public class PedidoTienePlatilloDao {
         ArrayList<PedidoTienePlatillo> list = new ArrayList();
         try{
             con = ConnectionDB.getConnection();
-            ps = con.prepareStatement("select distinct pm.* from pedidotieneplatillo ptp\n" +
-                    "inner join platilloenmenu pm ON ptp.idmenuplatillo = pm.idmenuplatillo\n" +
-                    "INNER JOIN platillo p ON p.idplatillo = pm.idplatillo where idPedido =?;");
+            ps = con.prepareStatement("select distinct pm.*,ptp.comentario , ptp.cantidad from pedidotieneplatillo ptp\n" +
+                    "  inner join platilloenmenu pm ON ptp.idmenuplatillo = pm.idmenuplatillo\n" +
+                    "  INNER JOIN platillo p ON p.idplatillo = pm.idplatillo where idPedido =?");
             ps.setInt(1,id);
             rs = ps.executeQuery();
             PedidoDao pedidoDao = new PedidoDao();
@@ -65,8 +65,8 @@ public class PedidoTienePlatilloDao {
                 PedidoTienePlatillo object = new PedidoTienePlatillo();
                 //object.setIdMenuPlatillo(platilloEnMenuDao.getPlatilloEnMenuById(rs.getInt(2)));
                 object.setPlatilloObject(platillo.getPlatilloById(rs.getInt(5)));
-                object.setCantidad(rs.getInt(3));
-                object.setComentario(rs.getString(4));
+                object.setCantidad(rs.getInt(7));
+                object.setComentario(rs.getString(6));
                 list.add(object);
             }
         }catch(Exception e){
