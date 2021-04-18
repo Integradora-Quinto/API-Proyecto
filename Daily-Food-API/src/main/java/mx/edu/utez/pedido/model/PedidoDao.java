@@ -72,8 +72,9 @@ public class PedidoDao {
                 p.setComentario(rs.getString(6));
                 ped.setIdPedido(p);
                 ped.setPersona(persona.getPersonaById(usuarioDAO.getUsuarioByUser(rs.getString(5)).getIdPersona().getIdPersona()));
-                ped.setTelefono(rs.getString(5));
+                ped.setTelefono(usuarioDAO.getUsuarioByUser(rs.getString(5)).getTelefono());
                 ped.setPedidoplatillos(ptp.getPlatillosByPedido(rs.getInt(1)));
+                ped.setNombreUsuario(rs.getString(5));
                 pedidosP.add(ped);
             }
         }catch (Exception e) {

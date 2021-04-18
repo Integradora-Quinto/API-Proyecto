@@ -12,6 +12,7 @@ public class PedidoCompleto {
     private Persona persona;
     private String telefono;
     private ArrayList<PedidoTienePlatillo> pedidoplatillos;
+    private String nombreUsuario;
 
     public PedidoCompleto() {
     }
@@ -22,6 +23,8 @@ public class PedidoCompleto {
         this.telefono = telefono;
         this.pedidoplatillos = pedidoplatillos;
     }
+
+
 
     public String getTelefono() {
         return telefono;
@@ -54,4 +57,7 @@ public class PedidoCompleto {
     public void setPedidoplatillos(ArrayList<PedidoTienePlatillo> pedidoplatillos) {
         this.pedidoplatillos = pedidoplatillos;
     }
+    public String getNombreUsuario() { return nombreUsuario;}
+
+    public void setNombreUsuario(String nombreUsuario) {this.nombreUsuario = nombreUsuario;}
 }
