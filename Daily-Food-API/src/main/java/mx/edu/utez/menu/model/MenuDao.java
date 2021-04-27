@@ -40,6 +40,7 @@ public class MenuDao {
                 System.out.println("IDMENU DIA :> " + rs.getInt(4));
                 System.out.println("ID MENU :> " + rs.getInt(3));
                 menu = menuDao.getMenuById(rs.getInt(3));
+                menu.setIdMenuDia(rs.getInt(4));
                 PlatilloCompleto platillo = platDao.getPlatilloCompletoById(rs.getInt(1));
                 platillo.setIdMenuPlatillo(rs.getInt(2));
                 platillo.setIngredientes(null);

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConnectionDB {
 
     //Dirección de acceso
-    public static String idAddress = "54.90.109.84";
+    public static String idAddress = "3.95.66.199";
     //Nombre de la base de datos
     public static String database = "mydb";
     //Nombre de usuario para realizar la conexión
