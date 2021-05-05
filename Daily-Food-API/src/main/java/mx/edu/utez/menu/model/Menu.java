@@ -15,6 +15,7 @@ public class Menu {
     private Sucursal idSucursal;
     private int idMenuDia;
 
+
     public int getIdMenuDia() {
         return idMenuDia;
     }
@@ -22,6 +23,7 @@ public class Menu {
     public void setIdMenuDia(int idMenuDia) {
         this.idMenuDia = idMenuDia;
     }
+
     public int getIdMenu() {
         return idMenu;
     }
