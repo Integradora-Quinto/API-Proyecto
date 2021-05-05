@@ -13,7 +13,15 @@ public class Menu {
     private TipoMenu idTipoMenu;
     private List<PlatilloCompleto> platillos;
     private Sucursal idSucursal;
+    private int idMenuDia;
 
+    public int getIdMenuDia() {
+        return idMenuDia;
+    }
+
+    public void setIdMenuDia(int idMenuDia) {
+        this.idMenuDia = idMenuDia;
+    }
     public int getIdMenu() {
         return idMenu;
     }

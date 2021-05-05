@@ -36,6 +36,28 @@ public class ServicePlatillo {
         return response;
     }
 
+
+    @GET
+    @Path("/platillos/nombre")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public MyResponse getPlatillosName() throws SQLException{
+        MyResponse response = new MyResponse();
+        List list = (new PlatilloDao().getPlatillosName());
+        if(list.size() > 0){
+            response.setCode(200);
+            response.setStatus("success");
+            response.setMessage("READ PLATILLOS");
+            response.setData(list);
+        }else{
+            response.setCode(400);
+            response.setStatus("error");
+            response.setMessage("ERROR READ PLATILLOS");
+            response.setData(null);
+        }
+        return response;
+    }
+
     @GET
     @Path("/platillos/forprecios")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -56,6 +78,9 @@ public class ServicePlatillo {
         }
         return response;
     }
+
+
+
 
     @GET
     @Path("/platillos/forMenus/{tipo}")

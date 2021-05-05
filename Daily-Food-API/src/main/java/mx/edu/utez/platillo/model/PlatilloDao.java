@@ -45,6 +45,31 @@ public class PlatilloDao {
         return platillos;
     }
 
+    public List getPlatillosName() throws SQLException {
+        ArrayList<Platillo> platillos = new ArrayList();
+        try{
+            con = ConnectionDB.getConnection();
+            ps = con.prepareStatement("SELECT idPlatillo, nombrePlatillo FROM platillo;");
+            rs = ps.executeQuery();
+            PlatilloDao dao = new PlatilloDao();
+             Platillo platillo;
+            while(rs.next()){
+                platillo = new Platillo();
+
+                 platillo.setIdPlatillo(rs.getInt(1));
+                 platillo.setNombrePlatillo(rs.getString(2));
+                platillos.add(platillo);
+            }
+        }catch(Exception e){
+            System.err.println("ERROR GET PLATILLOSNAME " + e.getMessage());
+        }finally{
+            if(rs!=null)rs.close();
+            if(ps!=null)ps.close();
+            if(con!=null) con.close();
+        }
+        return platillos;
+    }
+
     public PlatilloCompleto getPlatilloCompletoById(int id) throws SQLException{
         PlatilloCompleto platillo = new PlatilloCompleto();
         try{
