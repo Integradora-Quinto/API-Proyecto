@@ -7,13 +7,13 @@ import java.sql.SQLException;
 public class ConnectionDB {
 
     //Dirección de acceso
-    public static String idAddress = "3.95.66.199";
+    public static String idAddress = "localhost";
     //Nombre de la base de datos
     public static String database = "mydb";
     //Nombre de usuario para realizar la conexión
-    public static String user = "diegovelasco";
+    public static String user = "root";
     //Contraseña
-    public static String password = "2320081229";
+    public static String password = "123456";
     //Puerto /**Depende de la configuración de la máquina*
     public static String port = "3306";
     //Zona horaria "no es necesario en todos los equipos"

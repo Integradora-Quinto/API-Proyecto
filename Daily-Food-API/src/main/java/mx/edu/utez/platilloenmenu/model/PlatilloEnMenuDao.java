@@ -63,7 +63,7 @@ public class PlatilloEnMenuDao {
         List<PlatilloEnMenu> platillos = new ArrayList<>();
         try{
             Connection con = ConnectionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM platilloenmenu WHERE idMenu = ? ANS status=1");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM platilloenmenu WHERE idMenu = ? AND status=1");
             ps.setInt(1, idMenu);
             ResultSet rs = ps.executeQuery();
             PlatilloEnMenuDao platilloEnMenuDao = new PlatilloEnMenuDao();

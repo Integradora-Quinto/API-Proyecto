@@ -70,6 +70,8 @@ public class PlatilloDao {
         return platillos;
     }
 
+
+
     public PlatilloCompleto getPlatilloCompletoById(int id) throws SQLException{
         PlatilloCompleto platillo = new PlatilloCompleto();
         try{
